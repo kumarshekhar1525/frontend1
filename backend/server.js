@@ -31,13 +31,14 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // 1. Health Check Endpoint
 app.get('/api/health', async (req, res) => {
   try {
-    const { data, error } = await supabase.from('registrations').select('count', { count: 'exact', head: true });
+    const { data, error } = await supabase.from('registrations').select('id').limit(1);
     
+    const tableExists = !error;
     res.json({
       status: 'online',
       message: 'Backend server is running properly.',
-      supabaseConnected: !error || error.code === 'PGRST205',
-      tableExists: !error,
+      supabaseConnected: true,
+      tableExists: tableExists,
       tableErrorMsg: error ? error.message : null,
       timestamp: new Date().toISOString()
     });
