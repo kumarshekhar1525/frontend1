@@ -8,7 +8,6 @@ const path = require('path');
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Enable CORS and JSON parsing
 app.use(cors());
@@ -167,20 +166,24 @@ app.get('/api/registrations', async (req, res) => {
   }
 });
 
+const PORT = parseInt(process.env.PORT || '5001', 10);
+
 // Start Express Server with Automatic Port Retry on EADDRINUSE
 function startServer(portToTry) {
-  const server = app.listen(portToTry, () => {
+  const currentPort = Number(portToTry);
+  const server = app.listen(currentPort, () => {
     console.log(`=================================================`);
     console.log(`🚀 Registration Backend Server Running!`);
-    console.log(`📡 URL: http://localhost:${portToTry}`);
-    console.log(`🔗 Health Check: http://localhost:${portToTry}/api/health`);
+    console.log(`📡 URL: http://localhost:${currentPort}`);
+    console.log(`🔗 Health Check: http://localhost:${currentPort}/api/health`);
     console.log(`=================================================`);
   });
 
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.warn(`⚠️  Port ${portToTry} is currently in use. Trying port ${portToTry + 1}...`);
-      startServer(portToTry + 1);
+      const nextPort = currentPort + 1;
+      console.warn(`⚠️  Port ${currentPort} is currently in use. Trying port ${nextPort}...`);
+      startServer(nextPort);
     } else {
       console.error('❌ Server error:', err);
     }

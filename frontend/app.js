@@ -6,7 +6,7 @@ const defaultOrigin = (typeof window !== 'undefined' && window.location.origin &
     : 'http://localhost:5001/api';
 
 let API_BASE_URL = defaultOrigin;
-const CANDIDATE_PORTS = [5001, 5000, 5002, 5003];
+const CANDIDATE_PORTS = [5001, 5005, 5002, 5003, 5004, 5006, 5007, 5008, 5009, 5010, 5000];
 
 // DOM Element References
 const form = document.getElementById('registrationForm');
