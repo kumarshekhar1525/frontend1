@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration System | Supabase Powered</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Ambient Glowing Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Header / Navigation Bar -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-title">RegisHub</span>
+                    <span class="brand-sub">Supabase + Express</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="system-badge" id="systemBadge">
+                    <span class="status-dot pulsing"></span>
+                    <span id="systemStatusText">Checking API...</span>
+                </div>
+                <button type="button" class="btn-secondary" id="viewUsersBtn">
+                    <i class="fa-solid fa-users"></i> View Registered (<span id="userCount">0</span>)
+                </button>
+            </div>
+        </header>
+
+        <!-- Form Hero Section -->
+        <main class="form-wrapper">
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h2>Create Account</h2>
+                    <p>Enter your details below to register into the system database.</p>
+                </div>
+
+                <!-- Registration Form -->
+                <form id="registrationForm" novalidate>
+                    <div class="form-grid">
+                        
+                        <!-- Full Name Field -->
+                        <div class="input-group">
+                            <label for="fullName">
+                                <i class="fa-solid fa-user"></i> Full Name <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text" id="fullName" name="full_name" placeholder="John Doe" required autocomplete="name">
+                                <i class="fa-solid fa-circle-check valid-icon"></i>
+                            </div>
+                            <span class="error-msg" id="fullNameError">Full Name is required</span>
+                        </div>
+
+                        <!-- Father's Name Field -->
+                        <div class="input-group">
+                            <label for="fatherName">
+                                <i class="fa-solid fa-user-tie"></i> Father's Name <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="text" id="fatherName" name="father_name" placeholder="Robert Doe" required>
+                                <i class="fa-solid fa-circle-check valid-icon"></i>
+                            </div>
+                            <span class="error-msg" id="fatherNameError">Father's Name is required</span>
+                        </div>
+
+                        <!-- Email Address Field -->
+                        <div class="input-group">
+                            <label for="email">
+                                <i class="fa-solid fa-envelope"></i> Email Address <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email">
+                                <i class="fa-solid fa-circle-check valid-icon"></i>
+                            </div>
+                            <span class="error-msg" id="emailError">Please enter a valid email address</span>
+                        </div>
+
+                        <!-- Phone Number Field -->
+                        <div class="input-group">
+                            <label for="phone">
+                                <i class="fa-solid fa-phone"></i> Phone Number
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" autocomplete="tel">
+                                <i class="fa-solid fa-circle-check valid-icon"></i>
+                            </div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="input-group">
+                            <label for="password">
+                                <i class="fa-solid fa-lock"></i> Password <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="password" id="password" name="password" placeholder="••••••••" required>
+                                <button type="button" class="toggle-password" id="togglePasswordBtn">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="strength-bar-wrapper">
+                                <div class="strength-bar" id="strengthBar"></div>
+                            </div>
+                            <span class="error-msg" id="passwordError">Password must be at least 6 characters</span>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="input-group">
+                            <label for="confirmPassword">
+                                <i class="fa-solid fa-lock"></i> Confirm Password <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                            </div>
+                            <span class="error-msg" id="confirmPasswordError">Passwords do not match</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Terms & Conditions Checkbox -->
+                    <div class="checkbox-group">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="termsCheck" required>
+                            <span class="checkmark"></span>
+                            <span class="label-text">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                        </label>
+                        <span class="error-msg" id="termsError">You must accept the terms to register</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Registration</span>
+                        <span class="spinner" id="btnSpinner"></span>
+                    </button>
+
+                </form>
+            </div>
+        </main>
+
+        <!-- Registered Users Modal -->
+        <div class="modal-overlay" id="usersModal">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3><i class="fa-solid fa-database"></i> Registered Database Users</h3>
+                    <button type="button" class="modal-close" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <div class="loading-state" id="modalLoading">
+                        <div class="spinner"></div>
+                        <p>Fetching records from Supabase...</p>
+                    </div>
+                    <div class="table-responsive" id="usersTableWrapper" style="display: none;">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Father's Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Registered Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" id="modalEmpty" style="display: none;">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No registered users found in the database yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
