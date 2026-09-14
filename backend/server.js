@@ -157,11 +157,24 @@ app.get('/api/registrations', async (req, res) => {
   }
 });
 
-// Start Express Server
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`🚀 Registration Backend Server Running!`);
-  console.log(`📡 URL: http://localhost:${PORT}`);
-  console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`=================================================`);
-});
+// Start Express Server with Automatic Port Retry on EADDRINUSE
+function startServer(portToTry) {
+  const server = app.listen(portToTry, () => {
+    console.log(`=================================================`);
+    console.log(`🚀 Registration Backend Server Running!`);
+    console.log(`📡 URL: http://localhost:${portToTry}`);
+    console.log(`🔗 Health Check: http://localhost:${portToTry}/api/health`);
+    console.log(`=================================================`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`⚠️  Port ${portToTry} is currently in use. Trying port ${portToTry + 1}...`);
+      startServer(portToTry + 1);
+    } else {
+      console.error('❌ Server error:', err);
+    }
+  });
+}
+
+startServer(PORT);

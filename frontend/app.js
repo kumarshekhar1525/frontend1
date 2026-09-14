@@ -1,9 +1,8 @@
 // =========================================================
 // REGISTRATION FORM FRONTEND APPLICATION LOGIC
-// Express Backend Endpoint: http://localhost:5000
-// =========================================================
-
-const API_BASE_URL = 'http://localhost:5000/api';
+// Express Backend Base URL (Default port 5001, fallback to 5000/5002)
+let API_BASE_URL = 'http://localhost:5001/api';
+const CANDIDATE_PORTS = [5001, 5000, 5002, 5003];
 
 // DOM Element References
 const form = document.getElementById('registrationForm');
@@ -70,31 +69,37 @@ function setupEventListeners() {
     });
 }
 
-// 1. Health Check & Database Status
+// 1. Health Check & Database Status (Auto-discovers active port)
 async function checkBackendHealth() {
     const statusDot = systemBadge.querySelector('.status-dot');
-    try {
-        const res = await fetch(`${API_BASE_URL}/health`);
-        const data = await res.json();
+    
+    for (const port of CANDIDATE_PORTS) {
+        try {
+            const testUrl = `http://localhost:${port}/api`;
+            const res = await fetch(`${testUrl}/health`);
+            const data = await res.json();
 
-        if (data.status === 'online') {
-            isBackendOnline = true;
-            statusDot.className = 'status-dot online';
-            
-            if (data.tableExists) {
-                systemStatusText.innerText = 'System Ready';
-            } else {
-                systemStatusText.innerText = 'Run SQL Schema';
-                showToast('Run supabase/schema.sql in Supabase SQL Editor to enable database tables.', 'error', 7000);
+            if (data.status === 'online') {
+                API_BASE_URL = testUrl;
+                isBackendOnline = true;
+                statusDot.className = 'status-dot online';
+                
+                if (data.tableExists) {
+                    systemStatusText.innerText = `Online (Port ${port})`;
+                } else {
+                    systemStatusText.innerText = `Run SQL Schema (Port ${port})`;
+                    showToast('Run supabase/schema.sql in Supabase SQL Editor to enable database tables.', 'error', 7000);
+                }
+                return;
             }
-        } else {
-            throw new Error('Backend offline');
+        } catch (err) {
+            // Try next port candidate
         }
-    } catch (err) {
-        isBackendOnline = false;
-        statusDot.className = 'status-dot error';
-        systemStatusText.innerText = 'Backend Offline';
     }
+
+    isBackendOnline = false;
+    statusDot.className = 'status-dot error';
+    systemStatusText.innerText = 'Backend Offline';
 }
 
 // 2. Fetch User Count for Header Counter
