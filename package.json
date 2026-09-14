@@ -1,0 +1,17 @@
+{
+  "name": "fullstack-registration-system",
+  "version": "1.0.0",
+  "description": "Fullstack registration system with separate frontend, Express backend, Supabase, and GitHub integration",
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "start": "npm --prefix backend start",
+    "init-db": "npm --prefix backend run init-db"
+  },
+  "keywords": [
+    "registration",
+    "supabase",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC"
+}

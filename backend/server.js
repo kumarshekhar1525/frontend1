@@ -3,8 +3,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { createClient } = require('@supabase/supabase-js');
 
-// Load environment variables
-dotenv.config();
+const path = require('path');
+// Load environment variables relative to backend directory
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
