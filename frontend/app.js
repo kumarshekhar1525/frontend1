@@ -1,7 +1,11 @@
 // =========================================================
 // REGISTRATION FORM FRONTEND APPLICATION LOGIC
-// Express Backend Base URL (Default port 5001, fallback to 5000/5002)
-let API_BASE_URL = 'http://localhost:5001/api';
+// Express Backend Base URL (Auto-detects window.location or defaults to 5001)
+const defaultOrigin = (typeof window !== 'undefined' && window.location.origin && window.location.origin.startsWith('http')) 
+    ? `${window.location.origin}/api` 
+    : 'http://localhost:5001/api';
+
+let API_BASE_URL = defaultOrigin;
 const CANDIDATE_PORTS = [5001, 5000, 5002, 5003];
 
 // DOM Element References
