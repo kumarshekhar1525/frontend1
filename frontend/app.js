@@ -378,63 +378,98 @@ function renderAdminDbList(list) {
 }
 
 // =========================================================
-// 5. MONEFY PRIVATE DAILY EXPENSE TRACKER & CALCULATOR
+// 5. MONEFY PRIVATE DAILY EXPENSE & CATEGORY ACCORDION ENGINE
 // =========================================================
+let currentSelectedMonth = 'September';
+
+const DEFAULT_MONEFY_ENTRIES = [
+    { id: 'm-1', title: 'Fua udhar', amount: 51900, category: 'Deposits', type: 'income', date: '2026-09-01' },
+    { id: 'm-2', title: 'Gold', amount: 20000, category: 'Deposits', type: 'income', date: '2026-09-01' },
+    { id: 'm-3', title: 'Silver', amount: 3700, category: 'Deposits', type: 'income', date: '2026-09-01' },
+    { id: 'm-4', title: 'Ankit', amount: 5000, category: 'Savings', type: 'income', date: '2026-09-06' },
+    { id: 'm-5', title: 'Santan', amount: 1300, category: 'Savings', type: 'income', date: '2026-09-01' },
+    { id: 'm-6', title: 'A', amount: 45000, category: 'Savings', type: 'income', date: '2026-09-01' },
+    { id: 'm-7', title: 'Monthly Salary Credit', amount: 20026, category: 'Salary', type: 'income', date: '2026-09-01' },
+    { id: 'm-8', title: 'House Maintenance & Rent', amount: 9306, category: 'House', type: 'expense', date: '2026-09-05' },
+    { id: 'm-9', title: 'Groceries & Lunch', amount: 1374, category: 'Food', type: 'expense', date: '2026-09-10' },
+    { id: 'm-10', title: 'Toiletry & Personal Supplies', amount: 83250, category: 'Toiletry', type: 'expense', date: '2026-08-28' },
+    { id: 'm-11', title: 'Family Gifts', amount: 6252, category: 'Gifts', type: 'expense', date: '2026-08-20' },
+    { id: 'm-12', title: 'Medical Checkup', amount: 3700, category: 'Health', type: 'expense', date: '2026-08-15' },
+    { id: 'm-13', title: 'Movie & Drinks', amount: 470, category: 'Entertainment', type: 'expense', date: '2026-09-12' }
+];
+
 function setupMonefyTracker() {
     const categorySelect = document.getElementById('dailyCategory');
     const customWrapper = document.getElementById('customOtherWrapper');
 
     if (categorySelect && customWrapper) {
         categorySelect.addEventListener('change', () => {
-            if (categorySelect.value === 'Other') {
-                customWrapper.style.display = 'block';
-            } else {
-                customWrapper.style.display = 'none';
-            }
+            if (categorySelect.value === 'Other') customWrapper.style.display = 'block';
+            else customWrapper.style.display = 'none';
+        });
+    }
+
+    const btnMinus = document.getElementById('btnMonefyExpense');
+    const btnPlus = document.getElementById('btnMonefyIncome');
+    const typeSelect = document.getElementById('dailyType');
+
+    if (btnMinus && typeSelect) {
+        btnMinus.addEventListener('click', () => {
+            typeSelect.value = 'expense';
+            document.getElementById('monefyForm').scrollIntoView({ behavior: 'smooth' });
+            showToast('Expense mode selected (-)', 'info');
+        });
+    }
+    if (btnPlus && typeSelect) {
+        btnPlus.addEventListener('click', () => {
+            typeSelect.value = 'income';
+            document.getElementById('monefyForm').scrollIntoView({ behavior: 'smooth' });
+            showToast('Income / Deposit mode selected (+)', 'info');
         });
     }
 
     const form = document.getElementById('monefyForm');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let title = document.getElementById('dailyTitle').value.trim();
-        const amount = parseFloat(document.getElementById('dailyAmount').value);
-        const category = document.getElementById('dailyCategory').value;
-        const customNote = document.getElementById('customOtherNote') ? document.getElementById('customOtherNote').value.trim() : '';
-        const date = document.getElementById('dailyDate').value || new Date().toISOString().slice(0, 10);
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let title = document.getElementById('dailyTitle').value.trim();
+            const amount = parseFloat(document.getElementById('dailyAmount').value);
+            const category = document.getElementById('dailyCategory').value;
+            const type = document.getElementById('dailyType').value;
+            const customNote = document.getElementById('customOtherNote') ? document.getElementById('customOtherNote').value.trim() : '';
+            const date = document.getElementById('dailyDate').value || new Date().toISOString().slice(0, 10);
 
-        if (category === 'Other' && customNote) {
-            title = `${title} (${customNote})`;
-        }
+            if (category === 'Other' && customNote) title = `${title} (${customNote})`;
+            if (!title || !amount) return;
 
-        if (!title || !amount) return;
+            const newEntry = {
+                id: 'm-' + Date.now(),
+                title,
+                amount,
+                category,
+                type,
+                date,
+                user_email: currentUser ? currentUser.email : 'guest'
+            };
 
-        const newEntry = {
-            id: 'm-' + Date.now(),
-            title,
-            amount,
-            category,
-            date,
-            user_email: currentUser ? currentUser.email : 'guest'
-        };
-
-        dailyMonefyList.unshift(newEntry);
-        saveMonefyToStorage();
-        renderMonefyExpenses();
-        form.reset();
-        if (customWrapper) customWrapper.style.display = 'none';
-        triggerConfetti();
-        showToast('🍲 Daily expense logged in private tracker!', 'success');
-    });
+            dailyMonefyList.unshift(newEntry);
+            saveMonefyToStorage();
+            renderMonefyExpenses();
+            form.reset();
+            if (customWrapper) customWrapper.style.display = 'none';
+            triggerConfetti();
+            showToast(`🎉 Logged ${type === 'income' ? 'Income' : 'Expense'} entry: ₹${amount.toLocaleString()}`, 'success');
+        });
+    }
 }
 
 function loadMonefyDailyExpenses() {
     const key = currentUser ? `finhub_monefy_${currentUser.email}` : 'finhub_monefy_guest';
     const saved = localStorage.getItem(key);
     if (saved) {
-        try { dailyMonefyList = JSON.parse(saved); } catch (e) { dailyMonefyList = []; }
+        try { dailyMonefyList = JSON.parse(saved); } catch (e) { dailyMonefyList = DEFAULT_MONEFY_ENTRIES; }
     } else {
-        dailyMonefyList = [];
+        dailyMonefyList = DEFAULT_MONEFY_ENTRIES;
     }
     renderMonefyExpenses();
 }
@@ -444,65 +479,126 @@ function saveMonefyToStorage() {
     localStorage.setItem(key, JSON.stringify(dailyMonefyList));
 }
 
+function switchMonefyMonth(monthName) {
+    currentSelectedMonth = monthName;
+    document.querySelectorAll('.month-pill').forEach(pill => {
+        pill.classList.toggle('active', pill.innerText.trim() === monthName);
+    });
+    renderMonefyExpenses();
+}
+window.switchMonefyMonth = switchMonefyMonth;
+
+function getCategoryIcon(cat) {
+    const icons = {
+        Deposits: '💰',
+        Savings: '🐖',
+        Salary: '🪙',
+        House: '🏠',
+        Food: '🍲',
+        Study: '📚',
+        Tuition: '🏫',
+        Entertainment: '🎬',
+        Toiletry: '🪥',
+        Gifts: '🎁',
+        Health: '🌡️',
+        Other: '📦'
+    };
+    return icons[cat] || '🏷️';
+}
+
 function renderMonefyExpenses() {
-    const tbody = document.getElementById('dailyExpenseTableBody');
-    let monthlyTotal = 0;
-    let yearlyTotal = 0;
+    const treeContainer = document.getElementById('monefyAccordionTree');
+    const summaryTbody = document.getElementById('monefySummaryTableBody');
+    const balanceValEl = document.getElementById('monefyNetBalanceVal');
 
-    const categoryTotals = { Food: 0, Study: 0, Tuition: 0, Entertainment: 0, Vehicle: 0, Other: 0 };
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+    let totalIncome = 0;
+    let totalExpense = 0;
+    let monthlyTotalSpend = 0;
+    let yearlyTotalSpend = 0;
 
-    tbody.innerHTML = dailyMonefyList.map(item => {
+    const categoryMap = {};
+
+    dailyMonefyList.forEach(item => {
         const amt = parseFloat(item.amount) || 0;
-        const d = new Date(item.date);
-
-        if (d.getFullYear() === currentYear) {
-            yearlyTotal += amt;
-            if (d.getMonth() === currentMonth) {
-                monthlyTotal += amt;
-                if (categoryTotals[item.category] !== undefined) categoryTotals[item.category] += amt;
-                else categoryTotals.Other += amt;
-            }
+        if (item.type === 'income') totalIncome += amt;
+        else {
+            totalExpense += amt;
+            yearlyTotalSpend += amt;
+            monthlyTotalSpend += amt;
         }
 
-        return `
-            <tr>
-                <td><strong>${escapeHtml(item.title)}</strong></td>
-                <td><span class="legend-tag tag-${getCategoryTagClass(item.category)}">${escapeHtml(item.category)}</span></td>
-                <td>${item.date}</td>
-                <td style="color:#ef4444; font-weight:700;">-₹${amt.toLocaleString()}</td>
-                <td><button onclick="deleteMonefyEntry('${item.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>
-            </tr>
-        `;
-    }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No private daily expenses logged yet. Add your first expense above!</td></tr>';
+        if (!categoryMap[item.category]) {
+            categoryMap[item.category] = { count: 0, total: 0, items: [] };
+        }
+        categoryMap[item.category].count += 1;
+        categoryMap[item.category].total += amt;
+        categoryMap[item.category].items.push(item);
+    });
 
-    document.getElementById('monthlyTotalVal').innerText = `₹${monthlyTotal.toLocaleString()}`;
-    document.getElementById('yearlyTotalVal').innerText = `₹${yearlyTotal.toLocaleString()}`;
+    const netBalance = totalIncome - totalExpense;
+    if (balanceValEl) balanceValEl.innerText = `₹${netBalance.toLocaleString()}.00`;
 
-    // Monefy Category Percentage Analytics Calculation
-    const grandMonthCatTotal = Object.values(categoryTotals).reduce((a, b) => a + b, 0) || 1;
-    const pFood = Math.round((categoryTotals.Food / grandMonthCatTotal) * 100);
-    const pStudy = Math.round((categoryTotals.Study / grandMonthCatTotal) * 100);
-    const pTuition = Math.round((categoryTotals.Tuition / grandMonthCatTotal) * 100);
-    const pEnt = Math.round((categoryTotals.Entertainment / grandMonthCatTotal) * 100);
-    const pVehicle = Math.round((categoryTotals.Vehicle / grandMonthCatTotal) * 100);
-    const pOther = Math.round((categoryTotals.Other / grandMonthCatTotal) * 100);
+    // Render Accordion Category Tree (Matches Monefy Screenshots Exactly)
+    if (treeContainer) {
+        const categories = Object.keys(categoryMap);
+        if (categories.length === 0) {
+            treeContainer.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.5rem;">No transactions recorded.</div>';
+        } else {
+            treeContainer.innerHTML = categories.map(cat => {
+                const data = categoryMap[cat];
+                const icon = getCategoryIcon(cat);
 
-    document.getElementById('segFood').style.width = `${pFood}%`;
-    document.getElementById('segStudy').style.width = `${pStudy}%`;
-    document.getElementById('segTuition').style.width = `${pTuition}%`;
-    document.getElementById('segEnt').style.width = `${pEnt}%`;
-    document.getElementById('segVehicle').style.width = `${pVehicle}%`;
-    document.getElementById('segOther').style.width = `${pOther}%`;
+                return `
+                    <div class="cat-accordion-group">
+                        <div class="cat-accordion-header" onclick="this.nextElementSibling.classList.toggle('hidden');">
+                            <div class="cat-left-info">
+                                <div class="cat-icon-badge">${icon}</div>
+                                <div class="cat-name-box">
+                                    <strong>${escapeHtml(cat)}</strong>
+                                    <span class="cat-count-pill">${data.count}</span>
+                                </div>
+                            </div>
+                            <span class="cat-total-amt" style="color:${cat === 'Deposits' || cat === 'Savings' || cat === 'Salary' ? '#10b981' : '#ef4444'};">
+                                ₹${data.total.toLocaleString()}.00
+                            </span>
+                        </div>
+                        <div class="cat-subitem-list">
+                            ${data.items.map(sub => `
+                                <div class="cat-subitem">
+                                    <div class="subitem-note">
+                                        <span class="dot-indicator"></span>
+                                        <span>${escapeHtml(sub.title)}</span>
+                                        <span style="color:var(--text-muted); font-size:0.75rem;">(${sub.date})</span>
+                                    </div>
+                                    <strong style="color:${sub.type === 'income' ? '#10b981' : '#ef4444'};">
+                                        ${sub.type === 'income' ? '+' : '-'}₹${parseFloat(sub.amount).toLocaleString()}
+                                    </strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
 
-    document.getElementById('pctFood').innerText = `${pFood}% (₹${categoryTotals.Food.toLocaleString()})`;
-    document.getElementById('pctStudy').innerText = `${pStudy}% (₹${categoryTotals.Study.toLocaleString()})`;
-    document.getElementById('pctTuition').innerText = `${pTuition}% (₹${categoryTotals.Tuition.toLocaleString()})`;
-    document.getElementById('pctEnt').innerText = `${pEnt}% (₹${categoryTotals.Entertainment.toLocaleString()})`;
-    document.getElementById('pctVehicle').innerText = `${pVehicle}% (₹${categoryTotals.Vehicle.toLocaleString()})`;
-    document.getElementById('pctOther').innerText = `${pOther}% (₹${categoryTotals.Other.toLocaleString()})`;
+    // Render Monthly & Yearly Summary Table
+    if (summaryTbody) {
+        const grandTotal = Object.values(categoryMap).reduce((acc, curr) => acc + curr.total, 0) || 1;
+        summaryTbody.innerHTML = Object.keys(categoryMap).map(cat => {
+            const data = categoryMap[cat];
+            const share = Math.round((data.total / grandTotal) * 100);
+            return `
+                <tr>
+                    <td><strong>${getCategoryIcon(cat)} ${escapeHtml(cat)}</strong></td>
+                    <td><span class="sch-badge" style="background:rgba(99,102,241,0.15); color:#818cf8;">${data.count} entries</span></td>
+                    <td style="color:#10b981; font-weight:700;">₹${data.total.toLocaleString()}</td>
+                    <td style="color:#818cf8; font-weight:700;">₹${(data.total * 12).toLocaleString()}</td>
+                    <td><strong style="color:#06b6d4;">${share}%</strong></td>
+                </tr>
+            `;
+        }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No records available.</td></tr>';
+    }
 }
 
 function getCategoryTagClass(cat) {

@@ -629,3 +629,204 @@ input:focus, select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99
 .gold-icon { color: #ffd700; }
 .platinum-icon { color: #e5e4e2; }
 .badge-item.locked { opacity: 0.35; filter: grayscale(1); }
+
+/* MONEFY APP SPECIFIC DESIGN STYLES */
+.monefy-top-bar {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.monefy-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.monefy-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+.monefy-balance-badge {
+    background: #10b981;
+    color: #07090e;
+    padding: 0.5rem 1.25rem;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+.monefy-balance-badge span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.85;
+}
+.monefy-balance-badge strong {
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.monefy-month-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.btn-month-nav {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.btn-month-nav:hover {
+    background: #10b981;
+    color: #fff;
+}
+.month-tab-pills {
+    display: flex;
+    gap: 0.5rem;
+}
+.month-pill {
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.month-pill:hover, .month-pill.active {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.monefy-action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0.5rem 0;
+}
+.btn-monefy-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid;
+    font-size: 1.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-monefy-circle:hover {
+    transform: scale(1.1);
+}
+.btn-minus {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+    color: #ef4444;
+    box-shadow: 0 6px 25px rgba(239, 68, 68, 0.3);
+}
+.btn-plus {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: #10b981;
+    color: #10b981;
+    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.3);
+}
+
+/* ACCORDION CATEGORY TREE */
+.monefy-accordion-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.cat-accordion-group {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.cat-accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.cat-accordion-header:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+.cat-left-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.cat-icon-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+.cat-name-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.cat-count-pill {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cat-total-amt {
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+.cat-subitem-list {
+    background: rgba(10, 15, 29, 0.8);
+    padding: 0.5rem 1rem 0.75rem 3.25rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.cat-subitem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+}
+.subitem-note {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.dot-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+}

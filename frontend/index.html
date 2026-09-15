@@ -302,113 +302,159 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 2: MONEFY PRIVATE DAILY EXPENSE TRACKER          -->
+            <!-- MODULE 2: MONEFY PRIVATE DAILY EXPENSE & CATEGORY ACCORDION -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-monefy">
-                <div class="metrics-grid">
-                    <div class="metric-card glass-card">
-                        <div class="metric-icon expense"><i class="fa-solid fa-calendar-day"></i></div>
-                        <div class="metric-info">
-                            <span class="metric-label">Monthly Total Spending (मासिक खर्च)</span>
-                            <h3 class="metric-value" id="monthlyTotalVal">₹0</h3>
+                <!-- MONEFY BRANDED HEADER & MONTH SELECTOR -->
+                <div class="monefy-top-bar glass-card">
+                    <div class="monefy-header-row">
+                        <div class="monefy-brand">
+                            <i class="fa-solid fa-wallet text-emerald"></i>
+                            <span class="monefy-title">Monefy Tracker</span>
+                        </div>
+                        <div class="monefy-balance-badge" id="monefyBalanceBadge">
+                            <span>Balance</span>
+                            <strong id="monefyNetBalanceVal">₹1,35,476.00</strong>
                         </div>
                     </div>
-                    <div class="metric-card glass-card">
-                        <div class="metric-icon budget"><i class="fa-solid fa-calendar-days"></i></div>
-                        <div class="metric-info">
-                            <span class="metric-label">Yearly Total Spending (वार्षिक खर्च)</span>
-                            <h3 class="metric-value" id="yearlyTotalVal">₹0</h3>
+
+                    <!-- MONTH SELECTOR TABS -->
+                    <div class="monefy-month-selector margin-top">
+                        <button type="button" class="btn-month-nav" id="btnPrevMonth"><i class="fa-solid fa-chevron-left"></i></button>
+                        <div class="month-tab-pills" id="monthTabPills">
+                            <span class="month-pill" onclick="switchMonefyMonth('July')">July</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('August')">August</span>
+                            <span class="month-pill active" id="currentMonthPill" onclick="switchMonefyMonth('September')">September</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('October')">October</span>
                         </div>
+                        <button type="button" class="btn-month-nav" id="btnNextMonth"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
 
-                <div class="glass-card">
+                <!-- CATEGORY PERCENTAGE ANALYTICS -->
+                <div class="glass-card margin-top margin-bottom">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-chart-pie glow-icon"></i> Student Spending Category Analytics (खर्च विश्लेषक)</h2>
-                        <p>See exactly what percentage (%) of your money is spent on Food, Study, Tuition, Entertainment, Vehicle, and Other.</p>
+                        <h2><i class="fa-solid fa-chart-pie glow-icon"></i> Spending & Deposit Category Breakdown</h2>
+                        <p>Visual percentage distribution across your active spending categories.</p>
                     </div>
                     <div class="monefy-analytics-bar" id="monefyAnalyticsBar">
-                        <div class="monefy-bar-segment seg-food" id="segFood" style="width: 0%;" title="Food"></div>
-                        <div class="monefy-bar-segment seg-study" id="segStudy" style="width: 0%;" title="Study"></div>
-                        <div class="monefy-bar-segment seg-tuition" id="segTuition" style="width: 0%;" title="Tuition"></div>
-                        <div class="monefy-bar-segment seg-entertainment" id="segEnt" style="width: 0%;" title="Entertainment"></div>
-                        <div class="monefy-bar-segment seg-vehicle" id="segVehicle" style="width: 0%;" title="Vehicle"></div>
-                        <div class="monefy-bar-segment seg-other" id="segOther" style="width: 0%;" title="Other"></div>
+                        <div class="monefy-bar-segment seg-food" id="segFood" style="width: 25%;" title="Food"></div>
+                        <div class="monefy-bar-segment seg-study" id="segStudy" style="width: 20%;" title="Study"></div>
+                        <div class="monefy-bar-segment seg-tuition" id="segTuition" style="width: 20%;" title="Tuition"></div>
+                        <div class="monefy-bar-segment seg-entertainment" id="segEnt" style="width: 15%;" title="Entertainment"></div>
+                        <div class="monefy-bar-segment seg-vehicle" id="segVehicle" style="width: 10%;" title="Vehicle"></div>
+                        <div class="monefy-bar-segment seg-other" id="segOther" style="width: 10%;" title="Other"></div>
                     </div>
 
                     <div class="monefy-category-legend" id="monefyLegend">
-                        <span class="legend-tag tag-food"><i class="fa-solid fa-utensils"></i> Food (Khana): <strong id="pctFood">0%</strong></span>
-                        <span class="legend-tag tag-study"><i class="fa-solid fa-book"></i> Study (Padhai): <strong id="pctStudy">0%</strong></span>
-                        <span class="legend-tag tag-tuition"><i class="fa-solid fa-chalkboard-user"></i> Home Tuition: <strong id="pctTuition">0%</strong></span>
-                        <span class="legend-tag tag-ent"><i class="fa-solid fa-film"></i> Entertainment: <strong id="pctEnt">0%</strong></span>
-                        <span class="legend-tag tag-vehicle"><i class="fa-solid fa-car"></i> Car / Vehicle: <strong id="pctVehicle">0%</strong></span>
-                        <span class="legend-tag tag-other"><i class="fa-solid fa-box"></i> Other: <strong id="pctOther">0%</strong></span>
+                        <span class="legend-tag tag-food"><i class="fa-solid fa-utensils"></i> Food: <strong id="pctFood">25%</strong></span>
+                        <span class="legend-tag tag-study"><i class="fa-solid fa-book"></i> Study: <strong id="pctStudy">20%</strong></span>
+                        <span class="legend-tag tag-tuition"><i class="fa-solid fa-chalkboard-user"></i> Tuition: <strong id="pctTuition">20%</strong></span>
+                        <span class="legend-tag tag-ent"><i class="fa-solid fa-film"></i> Entertainment: <strong id="pctEnt">15%</strong></span>
+                        <span class="legend-tag tag-vehicle"><i class="fa-solid fa-car"></i> Vehicle: <strong id="pctVehicle">10%</strong></span>
+                        <span class="legend-tag tag-other"><i class="fa-solid fa-box"></i> Other: <strong id="pctOther">10%</strong></span>
                     </div>
                 </div>
 
+                <!-- MONEFY ACCORDION CATEGORY TREE & FLOATING ACTION BUTTONS -->
                 <div class="grid-2col">
+                    <!-- ACCORDION TREE (MATCHES MONEFY APP SCREENSHOTS EXACTLY) -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-pen-to-square"></i> Log Daily Expense (दैनिक खर्च लिखें)</h2>
-                            <p>Private to your session. Log what you spent money on, amount, category, and date.</p>
+                            <h2><i class="fa-solid fa-folder-tree text-emerald"></i> Category Transactions Tree</h2>
+                            <p>Click any category to expand individual items & transactions.</p>
                         </div>
+                        <div class="monefy-accordion-tree" id="monefyAccordionTree">
+                            <!-- Populated dynamically by app.js -->
+                        </div>
+                    </div>
+
+                    <!-- LOG ENTRY FORM WITH FLOATING + AND - BUTTONS -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-plus-minus"></i> Add Income / Expense Entry</h2>
+                            <p>Select category, title, amount, and date.</p>
+                        </div>
+
+                        <div class="monefy-action-buttons margin-bottom">
+                            <button type="button" class="btn-monefy-circle btn-minus" id="btnMonefyExpense" title="Add Expense (-)"><i class="fa-solid fa-minus"></i></button>
+                            <button type="button" class="btn-monefy-circle btn-plus" id="btnMonefyIncome" title="Add Income / Deposit (+)"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
                         <form id="monefyForm">
                             <div class="form-group">
-                                <label><i class="fa-solid fa-comment-dots"></i> Reason / Purpose (Kyu khrch kiya?) *</label>
-                                <input type="text" id="dailyTitle" placeholder="e.g. Lunch with friends, Physics Tuition fee, Petrol" required>
+                                <label><i class="fa-solid fa-comment-dots"></i> Reason / Person / Note *</label>
+                                <input type="text" id="dailyTitle" placeholder="e.g. Ankit, Santan, Lunch with friends, Salary" required>
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (Kitna khrch किया? ₹) *</label>
-                                    <input type="number" id="dailyAmount" placeholder="350" min="1" required>
+                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (₹) *</label>
+                                    <input type="number" id="dailyAmount" placeholder="5000" min="1" required>
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-shapes"></i> Category (किस चीज़ में?)</label>
+                                    <label><i class="fa-solid fa-shapes"></i> Category</label>
                                     <select id="dailyCategory">
+                                        <option value="Deposits">💰 Deposits</option>
+                                        <option value="Savings">🐖 Savings</option>
+                                        <option value="Salary">🪙 Salary</option>
+                                        <option value="House">🏠 House / Rent</option>
                                         <option value="Food">🍲 Food / Khana</option>
                                         <option value="Study">📚 Study / Padhai</option>
-                                        <option value="Tuition">🏠 Home Tuition / Coaching</option>
-                                        <option value="Entertainment">🎬 Entertainment / Fun</option>
-                                        <option value="Vehicle">🚗 Car / Vehicle / Petrol</option>
+                                        <option value="Tuition">🏫 Home Tuition</option>
+                                        <option value="Entertainment">🎬 Entertainment</option>
+                                        <option value="Toiletry">🪥 Toiletry</option>
+                                        <option value="Gifts">🎁 Gifts</option>
+                                        <option value="Health">🌡️ Health</option>
                                         <option value="Other">📦 Other Expenses</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <!-- Dynamic Custom "Other" Detail Note Input -->
                             <div class="form-group" id="customOtherWrapper" style="display: none;">
-                                <label><i class="fa-solid fa-pen-nib"></i> Specify Custom Detail (Kis chij me khrch ho rha hai?) *</label>
+                                <label><i class="fa-solid fa-pen-nib"></i> Specify Custom Detail *</label>
                                 <input type="text" id="customOtherNote" placeholder="Write exact detail for Other category...">
                             </div>
 
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-calendar"></i> Date (Kis date pe khrch kiya?)</label>
-                                <input type="date" id="dailyDate" value="2026-09-15">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-right-left"></i> Type</label>
+                                    <select id="dailyType">
+                                        <option value="expense">Expense (-)</option>
+                                        <option value="income">Income / Deposit (+)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar"></i> Date</label>
+                                    <input type="date" id="dailyDate" value="2026-09-15">
+                                </div>
                             </div>
+
                             <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> Save Daily Expense Entry
+                                <i class="fa-solid fa-floppy-disk"></i> Save Transaction Entry
                             </button>
                         </form>
                     </div>
+                </div>
 
-                    <div class="glass-card">
-                        <div class="card-header">
-                            <h2><i class="fa-solid fa-list-check"></i> Private Daily Expenses Log</h2>
-                            <p>Calculates your monthly & annual spending breakdown.</p>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="users-table">
-                                <thead>
-                                    <tr>
-                                        <th>Reason</th>
-                                        <th>Category</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dailyExpenseTableBody"></tbody>
-                            </table>
-                        </div>
+                <!-- MONTHLY & YEARLY SUMMARY TABLE -->
+                <div class="glass-card margin-top">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-table"></i> Monthly & Yearly Category Summary Table</h2>
+                        <p>Total spending & deposits per category for Monthly and Annual comparison.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Transactions</th>
+                                    <th>Monthly Total</th>
+                                    <th>Yearly Total</th>
+                                    <th>Share (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monefySummaryTableBody"></tbody>
+                        </table>
                     </div>
                 </div>
             </section>
