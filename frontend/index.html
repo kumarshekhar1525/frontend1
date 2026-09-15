@@ -29,48 +29,37 @@
         <!-- STICKY HEADER NAVIGATION BAR -->
         <header class="sticky-navbar">
             <div class="nav-container">
-                
-                <!-- Brand Logo -->
                 <div class="nav-logo" id="navLogo">
-                    <div class="logo-icon">
-                        <i class="fa-solid fa-coins"></i>
-                    </div>
+                    <div class="logo-icon"><i class="fa-solid fa-coins"></i></div>
                     <div class="logo-text">
                         <span class="brand-name">FinHub</span>
-                        <span class="brand-badge">SaaS v3.0</span>
+                        <span class="brand-badge">SaaS v3.5</span>
                     </div>
                 </div>
 
-                <!-- Navigation Links -->
                 <nav class="nav-links" id="navLinks">
                     <a href="#" class="nav-link active" data-tab="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-expenses"><i class="fa-solid fa-wallet"></i> <span data-i18n="navExpenses">Expenses</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-monefy"><i class="fa-solid fa-utensils"></i> <span>Daily Expenses</span></a>
                     <a href="#" class="nav-link" data-tab="tab-scholarships"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navScholarships">Scholarships</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings Goals</span></a>
                     <a href="#" class="nav-link" data-tab="tab-emi"><i class="fa-solid fa-calculator"></i> <span data-i18n="navEMI">EMI Compare</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings</span></a>
                     <a href="#" class="nav-link" data-tab="tab-literacy"><i class="fa-solid fa-book-open-reader"></i> <span data-i18n="navLiteracy">Literacy</span></a>
                 </nav>
 
-                <!-- Navbar Action Controls -->
                 <div class="nav-actions">
-                    
-                    <!-- System Status Badge -->
-                    <div class="system-badge" id="systemBadge" title="Backend Status">
+                    <div class="system-badge" id="systemBadge">
                         <span class="status-dot online pulsing"></span>
                         <span id="systemStatusText">Online</span>
                     </div>
 
-                    <!-- Language Switcher -->
-                    <button type="button" class="btn-icon lang-btn" id="langToggleBtn" title="Switch Language (English / हिंदी)">
+                    <button type="button" class="btn-icon lang-btn" id="langToggleBtn">
                         <i class="fa-solid fa-language"></i> <span id="langLabel">HI</span>
                     </button>
 
-                    <!-- Theme Switcher -->
-                    <button type="button" class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                    <button type="button" class="btn-icon" id="themeToggleBtn">
                         <i class="fa-solid fa-moon"></i>
                     </button>
 
-                    <!-- Auth Buttons -->
                     <div class="auth-buttons-group" id="unauthButtons">
                         <button type="button" class="btn-secondary" id="openUserAuthBtn">
                             <i class="fa-solid fa-user"></i> <span data-i18n="userSignInBtn">User Sign In</span>
@@ -80,7 +69,6 @@
                         </button>
                     </div>
 
-                    <!-- User Profile Dropdown (When Logged In) -->
                     <div class="user-profile-badge" id="userProfileBadge" style="display: none;">
                         <div class="avatar-circle" id="userAvatar">U</div>
                         <div class="user-info">
@@ -90,10 +78,7 @@
                         <button type="button" class="btn-logout" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
                     </div>
 
-                    <!-- Mobile Hamburger Menu Button -->
-                    <button type="button" class="hamburger-btn" id="hamburgerBtn" title="Open Menu">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
+                    <button type="button" class="hamburger-btn" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </div>
         </header>
@@ -109,7 +94,7 @@
                         Empower Your Financial Future with <span class="gradient-text">Smart Insights & Scholarships</span>
                     </h1>
                     <p class="hero-subtext">
-                        Track expenses, calculate loan EMIs, plan savings goals, find verified scholarships, and master financial literacy — all in one modern, intuitive platform.
+                        Track daily expenses, compute loan EMIs, plan savings goals, find verified scholarships, and master financial literacy — all in one modern platform.
                     </p>
                     <div class="hero-ctas">
                         <button type="button" class="btn-primary hero-btn" id="heroGetStartedBtn">
@@ -126,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Hero Interactive Visual Showcase -->
                 <div class="hero-visual">
                     <div class="hero-glass-preview glass-card">
                         <div class="preview-header">
@@ -172,12 +156,8 @@
                         <h2><i class="fa-solid fa-chart-pie glow-icon"></i> <span data-i18n="dashboardTitle">User Personal Dashboard</span></h2>
                         <p data-i18n="dashboardSub">Overview of your personal income, expenses, applied scholarships, and savings goals.</p>
                     </div>
-                    <button type="button" class="btn-action" id="openAdminDbFromUserBtn" style="display: none;">
-                        <i class="fa-solid fa-database"></i> Admin Database View
-                    </button>
                 </div>
 
-                <!-- Personal Overview Cards -->
                 <div class="metrics-grid">
                     <div class="metric-card glass-card">
                         <div class="metric-icon income"><i class="fa-solid fa-arrow-trend-up"></i></div>
@@ -209,7 +189,6 @@
                     </div>
                 </div>
 
-                <!-- My Applied Scholarships & Applications Status -->
                 <div class="glass-card">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-file-signature"></i> My Scholarship Applications</h2>
@@ -234,86 +213,110 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 2: EXPENSES & BUDGET MANAGER                     -->
+            <!-- MODULE 2: MONEFY PRIVATE DAILY EXPENSE TRACKER & CALCULATOR -->
             <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-expenses">
-                <div class="glass-card budget-bar-card">
-                    <div class="budget-bar-header">
-                        <span><i class="fa-solid fa-gauge-high"></i> Monthly Budget Limit Usage</span>
-                        <span id="budgetPercentText">0% Used</span>
+            <section class="tab-panel" id="tab-monefy">
+                
+                <!-- Monefy Overview Stat Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon expense"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Monthly Total Spending (मासिक खर्च)</span>
+                            <h3 class="metric-value" id="monthlyTotalVal">₹0</h3>
+                        </div>
                     </div>
-                    <div class="progress-track large">
-                        <div class="progress-fill" id="budgetProgressFill"></div>
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon budget"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Yearly Total Spending (वार्षिक खर्च)</span>
+                            <h3 class="metric-value" id="yearlyTotalVal">₹0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monefy Category Percentage Analytics Bar -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-pie glow-icon"></i> Student Spending Category Analytics (खर्च विश्लेषक)</h2>
+                        <p>See exactly what percentage (%) of your money is spent on Food, Study, Tuition, Entertainment, Vehicle, and Other.</p>
+                    </div>
+                    <div class="monefy-analytics-bar" id="monefyAnalyticsBar">
+                        <div class="monefy-bar-segment seg-food" id="segFood" style="width: 0%;" title="Food"></div>
+                        <div class="monefy-bar-segment seg-study" id="segStudy" style="width: 0%;" title="Study"></div>
+                        <div class="monefy-bar-segment seg-tuition" id="segTuition" style="width: 0%;" title="Tuition"></div>
+                        <div class="monefy-bar-segment seg-entertainment" id="segEnt" style="width: 0%;" title="Entertainment"></div>
+                        <div class="monefy-bar-segment seg-vehicle" id="segVehicle" style="width: 0%;" title="Vehicle"></div>
+                        <div class="monefy-bar-segment seg-other" id="segOther" style="width: 0%;" title="Other"></div>
+                    </div>
+
+                    <div class="monefy-category-legend" id="monefyLegend">
+                        <span class="legend-tag tag-food"><i class="fa-solid fa-utensils"></i> Food (Khana): <strong id="pctFood">0%</strong></span>
+                        <span class="legend-tag tag-study"><i class="fa-solid fa-book"></i> Study (Padhai): <strong id="pctStudy">0%</strong></span>
+                        <span class="legend-tag tag-tuition"><i class="fa-solid fa-chalkboard-user"></i> Home Tuition: <strong id="pctTuition">0%</strong></span>
+                        <span class="legend-tag tag-ent"><i class="fa-solid fa-film"></i> Entertainment: <strong id="pctEnt">0%</strong></span>
+                        <span class="legend-tag tag-vehicle"><i class="fa-solid fa-car"></i> Car / Vehicle: <strong id="pctVehicle">0%</strong></span>
+                        <span class="legend-tag tag-other"><i class="fa-solid fa-box"></i> Other: <strong id="pctOther">0%</strong></span>
                     </div>
                 </div>
 
                 <div class="grid-2col">
-                    <!-- Add Transaction Form -->
+                    <!-- Monefy Form -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-circle-plus"></i> Add Transaction</h2>
-                            <p>Record income or expense entries into database.</p>
+                            <h2><i class="fa-solid fa-pen-to-square"></i> Log Daily Expense (दैनिक खर्च लिखें)</h2>
+                            <p>Private to your session. Log what you spent money on, amount, category, and date.</p>
                         </div>
-                        <form id="expenseForm">
+                        <form id="monefyForm">
                             <div class="form-group">
-                                <label><i class="fa-solid fa-pen"></i> Title *</label>
-                                <input type="text" id="txTitle" placeholder="e.g. Salary, Rent, Books" required>
+                                <label><i class="fa-solid fa-comment-dots"></i> Reason / Purpose (Kyu khrch kiya?) *</label>
+                                <input type="text" id="dailyTitle" placeholder="e.g. Lunch with friends, Physics Tuition fee, Petrol" required>
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (₹) *</label>
-                                    <input type="number" id="txAmount" placeholder="1500" min="1" required>
+                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (Kitna khrch किया? ₹) *</label>
+                                    <input type="number" id="dailyAmount" placeholder="350" min="1" required>
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-list"></i> Type</label>
-                                    <select id="txType">
-                                        <option value="expense">Expense</option>
-                                        <option value="income">Income</option>
+                                    <label><i class="fa-solid fa-shapes"></i> Category (किस चीज़ में?)</label>
+                                    <select id="dailyCategory">
+                                        <option value="Food">🍲 Food / Khana</option>
+                                        <option value="Study">📚 Study / Padhai</option>
+                                        <option value="Tuition">🏠 Home Tuition / Coaching</option>
+                                        <option value="Entertainment">🎬 Entertainment / Fun</option>
+                                        <option value="Vehicle">🚗 Car / Vehicle / Petrol</option>
+                                        <option value="Other">📦 Other Expenses</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-tags"></i> Category</label>
-                                    <select id="txCategory">
-                                        <option value="Food">Food & Dining</option>
-                                        <option value="Rent">Rent & Housing</option>
-                                        <option value="Education">Education & Books</option>
-                                        <option value="Transit">Transport & Fuel</option>
-                                        <option value="Entertainment">Fun & Entertainment</option>
-                                        <option value="Health">Healthcare</option>
-                                        <option value="Salary">Salary / Income</option>
-                                        <option value="General">General</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-calendar"></i> Date</label>
-                                    <input type="date" id="txDate">
-                                </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-calendar"></i> Date (Kis date pe khrch kiya?)</label>
+                                <input type="date" id="dailyDate">
                             </div>
                             <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> Add Transaction
+                                <i class="fa-solid fa-plus"></i> Save Daily Expense Entry
                             </button>
                         </form>
                     </div>
 
-                    <!-- Transactions List Table -->
+                    <!-- Daily Expenses Table -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-receipt"></i> Recent Transactions</h2>
-                            <p>Live sync with Supabase cloud database.</p>
+                            <h2><i class="fa-solid fa-list-check"></i> Private Daily Expenses Log</h2>
+                            <p>Calculates your monthly & annual spending breakdown.</p>
                         </div>
                         <div class="table-responsive">
                             <table class="users-table">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
+                                        <th>Reason</th>
                                         <th>Category</th>
+                                        <th>Date</th>
                                         <th>Amount</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="txTableBody">
+                                <tbody id="dailyExpenseTableBody">
                                     <!-- Dynamic rows -->
                                 </tbody>
                             </table>
@@ -323,10 +326,9 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 3: STUDENT & SCHOLARSHIP DIRECTORY              -->
+            <!-- MODULE 3: SCHOLARSHIP DIRECTORY                        -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-scholarships">
-                <!-- Student Budget Calculator -->
                 <div class="glass-card margin-bottom">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-graduation-cap glow-icon"></i> Student Finance & Allowance Planner</h2>
@@ -348,7 +350,6 @@
                     </div>
                 </div>
 
-                <!-- Scholarship Finder -->
                 <div class="glass-card">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-award"></i> Active Scholarships Directory</h2>
@@ -369,14 +370,55 @@
                         </select>
                     </div>
 
-                    <div class="scholarships-grid" id="scholarshipsGrid">
-                        <!-- Dynamic Scholarship Cards -->
+                    <div class="scholarships-grid" id="scholarshipsGrid"></div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 4: SAVINGS GOAL PLANNER (FIXED)                 -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-savings">
+                <div class="grid-2col">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-bullseye glow-icon"></i> Set New Savings Goal</h2>
+                            <p>Track target goals like Emergency Fund, Laptop, or College Tuition.</p>
+                        </div>
+                        <form id="savingsForm">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-star"></i> Goal Name *</label>
+                                <input type="text" id="goalName" placeholder="e.g. Laptop Fund, Emergency Fund" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-flag"></i> Target Amount (₹) *</label>
+                                    <input type="number" id="goalTarget" placeholder="60000" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-wallet"></i> Initial Savings (₹)</label>
+                                    <input type="number" id="goalInitial" placeholder="1000" value="0">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary" id="createGoalBtn">
+                                <i class="fa-solid fa-plus"></i> Create Savings Goal
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-vault"></i> Your Active Savings Goals</h2>
+                            <p>Deposit funds and monitor your visual progress bars.</p>
+                        </div>
+                        <div class="savings-cards-container" id="savingsCardsContainer">
+                            <!-- Dynamic Cards -->
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 4: EMI & LOAN COMPARISON CALCULATOR              -->
+            <!-- MODULE 5: EMI & LOAN COMPARISON CALCULATOR              -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-emi">
                 <div class="glass-card margin-bottom">
@@ -440,49 +482,6 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 5: SAVINGS GOAL PLANNER                           -->
-            <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-savings">
-                <div class="grid-2col">
-                    <div class="glass-card">
-                        <div class="card-header">
-                            <h2><i class="fa-solid fa-bullseye glow-icon"></i> Set New Savings Goal</h2>
-                            <p>Track target goals like Emergency Fund, Laptop, or College Tuition.</p>
-                        </div>
-                        <form id="savingsForm">
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-star"></i> Goal Name *</label>
-                                <input type="text" id="goalName" placeholder="e.g. Laptop Fund" required>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-flag"></i> Target Amount (₹) *</label>
-                                    <input type="number" id="goalTarget" placeholder="60000" required>
-                                </div>
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-wallet"></i> Initial Savings (₹)</label>
-                                    <input type="number" id="goalInitial" value="0">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> Create Savings Goal
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="glass-card">
-                        <div class="card-header">
-                            <h2><i class="fa-solid fa-vault"></i> Your Active Savings Goals</h2>
-                            <p>Deposit funds and monitor your progress.</p>
-                        </div>
-                        <div class="savings-cards-container" id="savingsCardsContainer">
-                            <!-- Dynamic Cards -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ======================================================= -->
             <!-- MODULE 6: FINANCIAL LITERACY PLATFORM                    -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-literacy">
@@ -515,7 +514,6 @@
                     </div>
                 </div>
 
-                <!-- Financial Literacy Quiz -->
                 <div class="glass-card">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-brain glow-icon"></i> Financial Knowledge Quiz</h2>
@@ -538,11 +536,7 @@
 
         </main>
 
-        <!-- ======================================================= -->
-        <!-- AUTH MODALS                                             -->
-        <!-- ======================================================= -->
-
-        <!-- 1. ADMIN PORTAL LOGIN MODAL (Gated for admin kumarshekharyadav9931@gmail.com) -->
+        <!-- AUTH & ADMIN MODALS -->
         <div class="modal-overlay" id="adminAuthModal">
             <div class="modal-content glass-card auth-modal-card">
                 <div class="modal-header">
@@ -572,7 +566,6 @@
             </div>
         </div>
 
-        <!-- 2. USER AUTH MODAL (Sign In / Sign Up) -->
         <div class="modal-overlay" id="userAuthModal">
             <div class="modal-content glass-card auth-modal-card">
                 <div class="modal-header">
@@ -588,7 +581,6 @@
                     <button type="button" class="auth-tab-btn" id="tabSignUpBtn">Create Account</button>
                 </div>
 
-                <!-- Sign In Form -->
                 <form id="userSignInForm">
                     <div class="form-group">
                         <label><i class="fa-solid fa-envelope"></i> Email Address *</label>
@@ -603,7 +595,6 @@
                     </button>
                 </form>
 
-                <!-- Sign Up Form -->
                 <form id="userSignUpForm" style="display: none;">
                     <div class="form-group">
                         <label><i class="fa-solid fa-user"></i> Full Name *</label>
@@ -628,7 +619,6 @@
             </div>
         </div>
 
-        <!-- 3. ADMIN DATABASE RECORDS DASHBOARD MODAL -->
         <div class="modal-overlay" id="adminDbModal">
             <div class="modal-content glass-card">
                 <div class="modal-header">
@@ -660,16 +650,13 @@
                                     <th>Registered Date</th>
                                 </tr>
                             </thead>
-                            <tbody id="adminDbTableBody">
-                                <!-- Dynamic rows -->
-                            </tbody>
+                            <tbody id="adminDbTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Toast Notifications Container -->
         <div class="toast-container" id="toastContainer"></div>
 
     </div>

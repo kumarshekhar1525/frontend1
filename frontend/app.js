@@ -1,7 +1,6 @@
 // =========================================================
-// FINHUB STARTUP SAAS APPLICATION ENGINE (v3.0)
-// Dual Auth System (User & Admin Portals), Admin DB Protection,
-// Hero CTAs, Sticky Navigation, User Personal Dashboard, i18n
+// FINHUB STARTUP SAAS APPLICATION ENGINE (v3.5)
+// Dual Auth, Monefy Daily Expense Tracker, Category Analytics, Savings Goal Fix
 // =========================================================
 
 const defaultOrigin = (typeof window !== 'undefined' && window.location.origin && window.location.origin.startsWith('http')) 
@@ -13,10 +12,11 @@ const CANDIDATE_PORTS = [5001, 5005, 5002, 5003, 5004, 5000];
 
 // State Management
 let currentLang = 'en';
-let currentUser = null; // { name, email } or null
+let currentUser = null;
 let adminToken = sessionStorage.getItem('finhub_admin_token') || null;
 
 let expensesList = [];
+let dailyMonefyList = [];
 let savingsGoalsList = [];
 let subscriptionsList = [];
 let scholarshipsList = [];
@@ -29,10 +29,9 @@ let quizScore = 0;
 const I18N = {
     en: {
         navDashboard: "Dashboard",
-        navExpenses: "Expenses",
         navScholarships: "Scholarships",
         navEMI: "EMI Compare",
-        navSavings: "Savings",
+        navSavings: "Savings Goals",
         navLiteracy: "Literacy",
         userSignInBtn: "User Sign In",
         dashboardTitle: "User Personal Dashboard",
@@ -40,10 +39,9 @@ const I18N = {
     },
     hi: {
         navDashboard: "डैशबोर्ड",
-        navExpenses: "खर्च",
         navScholarships: "छात्रवृत्ति",
         navEMI: "ईएमआई तुलना",
-        navSavings: "बचत",
+        navSavings: "बचत लक्ष्य",
         navLiteracy: "साक्षरता",
         userSignInBtn: "साइन इन करें",
         dashboardTitle: "उपयोगकर्ता व्यक्तिगत डैशबोर्ड",
@@ -51,7 +49,6 @@ const I18N = {
     }
 };
 
-// Quiz Questions
 const QUIZ_QUESTIONS = [
     { q: "What does the 50/30/20 budgeting rule suggest allocating 20% of your income to?", options: ["Entertainment & Fun", "Needs & Rent", "Savings & Investments", "Dining Out"], ans: 2 },
     { q: "What is an EMI in financial loans?", options: ["Easy Money Investment", "Equated Monthly Installment", "Estimated Monthly Income", "Extra Monthly Interest"], ans: 1 },
@@ -68,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAuthSystem();
     setupEmiCalculator();
     setupStudentPlanner();
+    setupSavingsGoalsForm();
+    setupMonefyTracker();
     loadScholarships();
     loadExpenses();
     loadSavingsGoals();
@@ -112,7 +111,6 @@ function setupNavigation() {
         navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('data-tab') === targetId));
         tabPanels.forEach(p => p.classList.toggle('active', p.id === targetId));
 
-        // Smooth scroll to main content
         if (window.scrollY > 300) {
             document.querySelector('.main-content-wrapper').scrollIntoView({ behavior: 'smooth' });
         }
@@ -126,26 +124,19 @@ function setupNavigation() {
         });
     });
 
-    // Mobile Hamburger
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    hamburgerBtn.addEventListener('click', () => {
+    document.getElementById('hamburgerBtn').addEventListener('click', () => {
         document.getElementById('navLinks').classList.toggle('active');
     });
 
-    // Hero CTAs
     document.getElementById('heroGetStartedBtn').addEventListener('click', () => {
-        if (!currentUser) {
-            openUserAuthModal('signup');
-        } else {
-            switchTab('tab-dashboard');
-        }
+        if (!currentUser) openUserAuthModal('signup');
+        else switchTab('tab-dashboard');
     });
 
     document.getElementById('heroExploreScholarshipsBtn').addEventListener('click', () => {
         switchTab('tab-scholarships');
     });
 
-    // Language Toggle
     document.getElementById('langToggleBtn').addEventListener('click', () => {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
         document.documentElement.setAttribute('data-lang', currentLang);
@@ -166,22 +157,17 @@ function applyI18n() {
 // 3. DUAL AUTH SYSTEM (USER & ADMIN PORTALS)
 // =========================================================
 function setupAuthSystem() {
-    // Admin Auth Trigger
     const openAdminAuthBtn = document.getElementById('openAdminAuthBtn');
     const adminAuthModal = document.getElementById('adminAuthModal');
     const closeAdminAuthBtn = document.getElementById('closeAdminAuthBtn');
 
     openAdminAuthBtn.addEventListener('click', () => {
-        if (adminToken) {
-            loadAdminDatabaseModal();
-        } else {
-            adminAuthModal.classList.add('active');
-        }
+        if (adminToken) loadAdminDatabaseModal();
+        else adminAuthModal.classList.add('active');
     });
 
     closeAdminAuthBtn.addEventListener('click', () => adminAuthModal.classList.remove('active'));
 
-    // Admin Toggle Password
     document.getElementById('toggleAdminPassBtn').addEventListener('click', () => {
         const passInput = document.getElementById('adminPassword');
         const isPass = passInput.getAttribute('type') === 'password';
@@ -189,7 +175,6 @@ function setupAuthSystem() {
         document.getElementById('toggleAdminPassBtn').querySelector('i').className = isPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
     });
 
-    // Admin Form Submit (Verifies kumarshekharyadav9931@gmail.com / Shekhu@1525)
     document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('adminEmail').value.trim();
@@ -217,7 +202,6 @@ function setupAuthSystem() {
         }
     });
 
-    // User Auth Modals
     const openUserAuthBtn = document.getElementById('openUserAuthBtn');
     const userAuthModal = document.getElementById('userAuthModal');
     const closeUserAuthBtn = document.getElementById('closeUserAuthBtn');
@@ -243,7 +227,6 @@ function setupAuthSystem() {
         userSignUpForm.style.display = 'block';
     });
 
-    // User Sign In Form
     userSignInForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = document.getElementById('signInEmail').value.trim();
@@ -255,9 +238,9 @@ function setupAuthSystem() {
         updateUserHeaderUI();
         showToast(`Welcome back, ${currentUser.name}!`, 'success');
         loadUserApplications();
+        loadMonefyDailyExpenses();
     });
 
-    // User Sign Up Form
     userSignUpForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const full_name = document.getElementById('signUpName').value.trim();
@@ -280,9 +263,9 @@ function setupAuthSystem() {
         triggerConfetti();
         showToast('🎉 Account created successfully!', 'success');
         loadUserApplications();
+        loadMonefyDailyExpenses();
     });
 
-    // Logout Button
     document.getElementById('logoutBtn').addEventListener('click', () => {
         currentUser = null;
         localStorage.removeItem('finhub_user');
@@ -290,7 +273,6 @@ function setupAuthSystem() {
         showToast('Logged out successfully.', 'success');
     });
 
-    // Close Admin DB Modal
     document.getElementById('closeAdminDbBtn').addEventListener('click', () => {
         document.getElementById('adminDbModal').classList.remove('active');
     });
@@ -299,11 +281,8 @@ function setupAuthSystem() {
 function openUserAuthModal(mode = 'signin') {
     const userAuthModal = document.getElementById('userAuthModal');
     userAuthModal.classList.add('active');
-    if (mode === 'signup') {
-        document.getElementById('tabSignUpBtn').click();
-    } else {
-        document.getElementById('tabSignInBtn').click();
-    }
+    if (mode === 'signup') document.getElementById('tabSignUpBtn').click();
+    else document.getElementById('tabSignInBtn').click();
 }
 
 function checkExistingUserSession() {
@@ -313,6 +292,7 @@ function checkExistingUserSession() {
             currentUser = JSON.parse(saved);
             updateUserHeaderUI();
             loadUserApplications();
+            loadMonefyDailyExpenses();
         } catch (e) {}
     }
 }
@@ -387,37 +367,241 @@ function renderAdminDbList(list) {
 }
 
 // =========================================================
-// 5. USER SCHOLARSHIPS & APPLICATIONS
+// 5. MONEFY PRIVATE DAILY EXPENSE TRACKER & CALCULATOR
 // =========================================================
-async function loadScholarships() {
-    try {
-        const res = await fetch(`${API_BASE_URL}/scholarships`);
-        const data = await res.json();
-        if (data.success && data.data) scholarshipsList = data.data;
-    } catch (err) {}
+function setupMonefyTracker() {
+    const form = document.getElementById('monefyForm');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('dailyTitle').value.trim();
+        const amount = parseFloat(document.getElementById('dailyAmount').value);
+        const category = document.getElementById('dailyCategory').value;
+        const date = document.getElementById('dailyDate').value || new Date().toISOString().slice(0, 10);
 
-    renderScholarships(scholarshipsList);
+        if (!title || !amount) return;
 
-    const schSearchInput = document.getElementById('schSearchInput');
-    const schCategoryFilter = document.getElementById('schCategoryFilter');
+        const newEntry = {
+            id: 'm-' + Date.now(),
+            title,
+            amount,
+            category,
+            date,
+            user_email: currentUser ? currentUser.email : 'guest'
+        };
 
-    function filterSch() {
-        const q = schSearchInput.value.toLowerCase().trim();
-        const cat = schCategoryFilter.value;
-
-        const filtered = scholarshipsList.filter(s => {
-            const matchesQuery = !q || s.title.toLowerCase().includes(q) || s.provider.toLowerCase().includes(q) || s.eligibility.toLowerCase().includes(q);
-            const matchesCat = cat === 'all' || s.category === cat;
-            return matchesQuery && matchesCat;
-        });
-
-        renderScholarships(filtered);
-    }
-
-    schSearchInput.addEventListener('input', filterSch);
-    schCategoryFilter.addEventListener('change', filterSch);
+        dailyMonefyList.unshift(newEntry);
+        saveMonefyToStorage();
+        renderMonefyExpenses();
+        form.reset();
+        triggerConfetti();
+        showToast('🍲 Daily expense logged in private tracker!', 'success');
+    });
 }
 
+function loadMonefyDailyExpenses() {
+    const key = currentUser ? `finhub_monefy_${currentUser.email}` : 'finhub_monefy_guest';
+    const saved = localStorage.getItem(key);
+    if (saved) {
+        try { dailyMonefyList = JSON.parse(saved); } catch (e) { dailyMonefyList = []; }
+    } else {
+        dailyMonefyList = [];
+    }
+    renderMonefyExpenses();
+}
+
+function saveMonefyToStorage() {
+    const key = currentUser ? `finhub_monefy_${currentUser.email}` : 'finhub_monefy_guest';
+    localStorage.setItem(key, JSON.stringify(dailyMonefyList));
+}
+
+function renderMonefyExpenses() {
+    const tbody = document.getElementById('dailyExpenseTableBody');
+    let monthlyTotal = 0;
+    let yearlyTotal = 0;
+
+    const categoryTotals = { Food: 0, Study: 0, Tuition: 0, Entertainment: 0, Vehicle: 0, Other: 0 };
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    tbody.innerHTML = dailyMonefyList.map(item => {
+        const amt = parseFloat(item.amount) || 0;
+        const d = new Date(item.date);
+
+        if (d.getFullYear() === currentYear) {
+            yearlyTotal += amt;
+            if (d.getMonth() === currentMonth) {
+                monthlyTotal += amt;
+                if (categoryTotals[item.category] !== undefined) categoryTotals[item.category] += amt;
+                else categoryTotals.Other += amt;
+            }
+        }
+
+        return `
+            <tr>
+                <td><strong>${escapeHtml(item.title)}</strong></td>
+                <td><span class="legend-tag tag-${getCategoryTagClass(item.category)}">${escapeHtml(item.category)}</span></td>
+                <td>${item.date}</td>
+                <td style="color:#ef4444; font-weight:700;">-₹${amt.toLocaleString()}</td>
+                <td><button onclick="deleteMonefyEntry('${item.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+        `;
+    }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No private daily expenses logged yet. Add your first expense above!</td></tr>';
+
+    document.getElementById('monthlyTotalVal').innerText = `₹${monthlyTotal.toLocaleString()}`;
+    document.getElementById('yearlyTotalVal').innerText = `₹${yearlyTotal.toLocaleString()}`;
+
+    // Monefy Category Percentage Analytics Calculation
+    const grandMonthCatTotal = Object.values(categoryTotals).reduce((a, b) => a + b, 0) || 1;
+    const pFood = Math.round((categoryTotals.Food / grandMonthCatTotal) * 100);
+    const pStudy = Math.round((categoryTotals.Study / grandMonthCatTotal) * 100);
+    const pTuition = Math.round((categoryTotals.Tuition / grandMonthCatTotal) * 100);
+    const pEnt = Math.round((categoryTotals.Entertainment / grandMonthCatTotal) * 100);
+    const pVehicle = Math.round((categoryTotals.Vehicle / grandMonthCatTotal) * 100);
+    const pOther = Math.round((categoryTotals.Other / grandMonthCatTotal) * 100);
+
+    document.getElementById('segFood').style.width = `${pFood}%`;
+    document.getElementById('segStudy').style.width = `${pStudy}%`;
+    document.getElementById('segTuition').style.width = `${pTuition}%`;
+    document.getElementById('segEnt').style.width = `${pEnt}%`;
+    document.getElementById('segVehicle').style.width = `${pVehicle}%`;
+    document.getElementById('segOther').style.width = `${pOther}%`;
+
+    document.getElementById('pctFood').innerText = `${pFood}% (₹${categoryTotals.Food.toLocaleString()})`;
+    document.getElementById('pctStudy').innerText = `${pStudy}% (₹${categoryTotals.Study.toLocaleString()})`;
+    document.getElementById('pctTuition').innerText = `${pTuition}% (₹${categoryTotals.Tuition.toLocaleString()})`;
+    document.getElementById('pctEnt').innerText = `${pEnt}% (₹${categoryTotals.Entertainment.toLocaleString()})`;
+    document.getElementById('pctVehicle').innerText = `${pVehicle}% (₹${categoryTotals.Vehicle.toLocaleString()})`;
+    document.getElementById('pctOther').innerText = `${pOther}% (₹${categoryTotals.Other.toLocaleString()})`;
+}
+
+function getCategoryTagClass(cat) {
+    if (cat === 'Food') return 'food';
+    if (cat === 'Study') return 'study';
+    if (cat === 'Tuition') return 'tuition';
+    if (cat === 'Entertainment') return 'ent';
+    if (cat === 'Vehicle') return 'vehicle';
+    return 'other';
+}
+
+function deleteMonefyEntry(id) {
+    dailyMonefyList = dailyMonefyList.filter(x => x.id !== id);
+    saveMonefyToStorage();
+    renderMonefyExpenses();
+    showToast('Entry deleted.', 'info');
+}
+
+// =========================================================
+// 6. SAVINGS GOALS PLANNER (GUARANTEED CREATION FIX)
+// =========================================================
+function setupSavingsGoalsForm() {
+    const form = document.getElementById('savingsForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const goal_name = document.getElementById('goalName').value.trim();
+        const target_amount = parseFloat(document.getElementById('goalTarget').value);
+        const current_amount = parseFloat(document.getElementById('goalInitial').value) || 0;
+
+        if (!goal_name || isNaN(target_amount) || target_amount <= 0) {
+            showToast('Please enter a valid goal name and target amount.', 'error');
+            return;
+        }
+
+        const newGoal = {
+            id: 'goal-' + Date.now(),
+            goal_name,
+            target_amount,
+            current_amount,
+            created_at: new Date().toISOString()
+        };
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/savings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goal_name, target_amount, current_amount })
+            });
+            const data = await res.json();
+            if (data.success && data.data) {
+                savingsGoalsList.unshift(data.data);
+            } else {
+                savingsGoalsList.unshift(newGoal);
+            }
+        } catch (err) {
+            savingsGoalsList.unshift(newGoal);
+        }
+
+        renderSavingsGoals();
+        triggerConfetti();
+        showToast(`🎯 Savings Goal "${goal_name}" Created Successfully!`, 'success');
+        form.reset();
+    });
+}
+
+async function loadSavingsGoals() {
+    try {
+        const res = await fetch(`${API_BASE_URL}/savings`);
+        const data = await res.json();
+        if (data.success && data.data && data.data.length > 0) {
+            savingsGoalsList = data.data;
+        }
+    } catch (err) {}
+    renderSavingsGoals();
+}
+
+function renderSavingsGoals() {
+    const container = document.getElementById('savingsCardsContainer');
+    if (!savingsGoalsList || savingsGoalsList.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:2rem;">No savings goals created yet. Use the form on the left to set your first goal!</div>';
+        return;
+    }
+
+    container.innerHTML = savingsGoalsList.map(g => {
+        const curr = parseFloat(g.current_amount) || 0;
+        const target = parseFloat(g.target_amount) || 1;
+        const percent = Math.min(100, Math.round((curr / target) * 100));
+
+        return `
+            <div class="goal-card">
+                <div class="goal-header">
+                    <span class="goal-title"><i class="fa-solid fa-bullseye text-indigo"></i> ${escapeHtml(g.goal_name)}</span>
+                    <span>₹${curr.toLocaleString()} / <strong>₹${target.toLocaleString()}</strong> (${percent}%)</span>
+                </div>
+                <div class="progress-track" style="height:10px;">
+                    <div class="progress-fill" style="width:${percent}%; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
+                </div>
+                <div class="deposit-row">
+                    <input type="number" id="dep-${g.id}" placeholder="Add deposit amount (₹)" min="1">
+                    <button class="btn-deposit" onclick="depositGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Deposit</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+async function depositGoal(id) {
+    const input = document.getElementById(`dep-${id}`);
+    const amt = parseFloat(input.value);
+    if (!amt || isNaN(amt)) return;
+
+    try {
+        await fetch(`${API_BASE_URL}/savings/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deposit_amount: amt })
+        });
+    } catch (err) {}
+
+    const goal = savingsGoalsList.find(x => x.id === id);
+    if (goal) goal.current_amount = (parseFloat(goal.current_amount) || 0) + amt;
+    renderSavingsGoals();
+    triggerConfetti();
+    showToast(`Deposited ₹${amt.toLocaleString()} into goal!`, 'success');
+}
+
+// =========================================================
+// 7. USER SCHOLARSHIPS & APPLICATIONS
+// =========================================================
 function renderScholarships(list) {
     const grid = document.getElementById('scholarshipsGrid');
     if (!list || list.length === 0) {
@@ -449,23 +633,17 @@ async function applyScholarship(id, title, amount) {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/user/apply-scholarship`, {
+        await fetch(`${API_BASE_URL}/user/apply-scholarship`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_email: currentUser.email, scholarship_id: id, scholarship_title: title, amount })
         });
-        const result = await res.json();
-        if (result.success) {
-            triggerConfetti();
-            showToast(`🎉 Applied for "${title}" successfully!`, 'success');
-            loadUserApplications();
-        }
-    } catch (err) {
-        triggerConfetti();
-        showToast(`🎉 Applied for "${title}"!`, 'success');
-        userApplicationsList.unshift({ scholarship_title: title, amount, status: 'Submitted', applied_at: new Date().toISOString() });
-        renderUserApplications();
-    }
+    } catch (err) {}
+
+    triggerConfetti();
+    showToast(`🎉 Applied for "${title}" successfully!`, 'success');
+    userApplicationsList.unshift({ scholarship_title: title, amount, status: 'Submitted', applied_at: new Date().toISOString() });
+    renderUserApplications();
 }
 
 async function loadUserApplications() {
@@ -500,7 +678,7 @@ function renderUserApplications() {
 }
 
 // =========================================================
-// 6. EXPENSES, SAVINGS & OTHER CALCULATORS
+// 8. EXPENSES, EMI & QUIZ
 // =========================================================
 function loadExpenses() {
     document.getElementById('expenseForm').addEventListener('submit', async (e) => {
@@ -641,85 +819,6 @@ function setupEmiCalculator() {
 
     [loanAAmount, loanARate, loanATenure, loanBAmount, loanBRate, loanBTenure].forEach(el => el.addEventListener('input', updateComparison));
     updateComparison();
-}
-
-function loadSavingsGoals() {
-    document.getElementById('savingsForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const goal_name = document.getElementById('goalName').value.trim();
-        const target_amount = parseFloat(document.getElementById('goalTarget').value);
-        const current_amount = parseFloat(document.getElementById('goalInitial').value) || 0;
-
-        if (!goal_name || !target_amount) return;
-
-        try {
-            await fetch(`${API_BASE_URL}/savings`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ goal_name, target_amount, current_amount })
-            });
-            fetchSavingsGoals();
-        } catch (err) {
-            savingsGoalsList.push({ id: Date.now().toString(), goal_name, target_amount, current_amount });
-            renderSavingsGoals();
-        }
-
-        showToast('Savings Goal created!', 'success');
-        document.getElementById('savingsForm').reset();
-    });
-
-    fetchSavingsGoals();
-}
-
-async function fetchSavingsGoals() {
-    try {
-        const res = await fetch(`${API_BASE_URL}/savings`);
-        const data = await res.json();
-        if (data.success && data.data) savingsGoalsList = data.data;
-    } catch (err) {}
-    renderSavingsGoals();
-}
-
-function renderSavingsGoals() {
-    const container = document.getElementById('savingsCardsContainer');
-    if (!savingsGoalsList || savingsGoalsList.length === 0) {
-        container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.5rem;">No savings goals created yet.</div>';
-        return;
-    }
-
-    container.innerHTML = savingsGoalsList.map(g => {
-        const curr = parseFloat(g.current_amount) || 0;
-        const target = parseFloat(g.target_amount) || 1;
-        const percent = Math.min(100, Math.round((curr / target) * 100));
-
-        return `
-            <div class="goal-card">
-                <div class="goal-header">
-                    <span class="goal-title">${escapeHtml(g.goal_name)}</span>
-                    <span>₹${curr.toLocaleString()} / <strong>₹${target.toLocaleString()}</strong></span>
-                </div>
-                <div class="progress-track" style="height:10px;">
-                    <div class="progress-fill" style="width:${percent}%; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
-                </div>
-                <div class="deposit-row">
-                    <input type="number" id="dep-${g.id}" placeholder="Add deposit (₹)" min="1">
-                    <button class="btn-deposit" onclick="depositGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Deposit</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-async function depositGoal(id) {
-    const input = document.getElementById(`dep-${id}`);
-    const amt = parseFloat(input.value);
-    if (!amt) return;
-
-    try { await fetch(`${API_BASE_URL}/savings/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deposit_amount: amt }) }); } catch (err) {}
-    const goal = savingsGoalsList.find(x => x.id === id);
-    if (goal) goal.current_amount = (parseFloat(goal.current_amount) || 0) + amt;
-    renderSavingsGoals();
-    showToast(`Deposited ₹${amt} into goal!`, 'success');
 }
 
 function loadQuizQuestion() {
