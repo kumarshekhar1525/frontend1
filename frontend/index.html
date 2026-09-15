@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinHub — Smart Financial Literacy, Expense & Loan Management Platform</title>
+    <title>FinHub — Smart Financial Literacy, Expense & Loan Management SaaS</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,119 +24,222 @@
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
 
-    <div class="app-container">
+    <div class="app-layout">
         
-        <!-- Header Bar -->
-        <header class="app-header">
-            <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fa-solid fa-coins"></i>
-                </div>
-                <div class="logo-text">
-                    <div class="brand-row">
-                        <span class="brand-title">FinHub</span>
-                        <span class="brand-tag">v2.5</span>
+        <!-- STICKY HEADER NAVIGATION BAR -->
+        <header class="sticky-navbar">
+            <div class="nav-container">
+                
+                <!-- Brand Logo -->
+                <div class="nav-logo" id="navLogo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-coins"></i>
                     </div>
-                    <span class="brand-sub" data-i18n="subTitle">Smart Financial Services & Literacy Hub</span>
-                </div>
-            </div>
-
-            <div class="header-actions">
-                <!-- System Status -->
-                <div class="system-badge" id="systemBadge">
-                    <span class="status-dot pulsing"></span>
-                    <span id="systemStatusText">API Online</span>
-                    <span class="ping-badge" id="pingBadge">-- ms</span>
+                    <div class="logo-text">
+                        <span class="brand-name">FinHub</span>
+                        <span class="brand-badge">SaaS v3.0</span>
+                    </div>
                 </div>
 
-                <!-- Language Switcher -->
-                <button type="button" class="btn-icon lang-btn" id="langToggleBtn" title="Switch Language (English / हिंदी)">
-                    <i class="fa-solid fa-language"></i> <span id="langLabel">HI</span>
-                </button>
+                <!-- Navigation Links -->
+                <nav class="nav-links" id="navLinks">
+                    <a href="#" class="nav-link active" data-tab="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-expenses"><i class="fa-solid fa-wallet"></i> <span data-i18n="navExpenses">Expenses</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-scholarships"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navScholarships">Scholarships</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-emi"><i class="fa-solid fa-calculator"></i> <span data-i18n="navEMI">EMI Compare</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-literacy"><i class="fa-solid fa-book-open-reader"></i> <span data-i18n="navLiteracy">Literacy</span></a>
+                </nav>
 
-                <!-- Theme Switcher -->
-                <button type="button" class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
+                <!-- Navbar Action Controls -->
+                <div class="nav-actions">
+                    
+                    <!-- System Status Badge -->
+                    <div class="system-badge" id="systemBadge" title="Backend Status">
+                        <span class="status-dot online pulsing"></span>
+                        <span id="systemStatusText">Online</span>
+                    </div>
 
-                <!-- Database Modal Trigger -->
-                <button type="button" class="btn-secondary" id="viewUsersBtn">
-                    <i class="fa-solid fa-database"></i> <span data-i18n="usersBtn">Database Records</span>
-                </button>
+                    <!-- Language Switcher -->
+                    <button type="button" class="btn-icon lang-btn" id="langToggleBtn" title="Switch Language (English / हिंदी)">
+                        <i class="fa-solid fa-language"></i> <span id="langLabel">HI</span>
+                    </button>
+
+                    <!-- Theme Switcher -->
+                    <button type="button" class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <!-- Auth Buttons -->
+                    <div class="auth-buttons-group" id="unauthButtons">
+                        <button type="button" class="btn-secondary" id="openUserAuthBtn">
+                            <i class="fa-solid fa-user"></i> <span data-i18n="userSignInBtn">User Sign In</span>
+                        </button>
+                        <button type="button" class="btn-admin-cta" id="openAdminAuthBtn" title="Admin Portal Login">
+                            <i class="fa-solid fa-shield-halved"></i> <span>Admin Portal</span>
+                        </button>
+                    </div>
+
+                    <!-- User Profile Dropdown (When Logged In) -->
+                    <div class="user-profile-badge" id="userProfileBadge" style="display: none;">
+                        <div class="avatar-circle" id="userAvatar">U</div>
+                        <div class="user-info">
+                            <span class="user-name" id="userNameLabel">User</span>
+                            <span class="user-role" id="userRoleLabel">Student Member</span>
+                        </div>
+                        <button type="button" class="btn-logout" id="logoutBtn" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>
+
+                    <!-- Mobile Hamburger Menu Button -->
+                    <button type="button" class="hamburger-btn" id="hamburgerBtn" title="Open Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
-        <!-- Navigation Tabs -->
-        <nav class="nav-tabs-wrapper">
-            <div class="nav-tabs" id="navTabs">
-                <button type="button" class="tab-btn active" data-tab="tab-dashboard">
-                    <i class="fa-solid fa-chart-pie"></i> <span data-i18n="tabDashboard">Expenses & Budget</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-scholarships">
-                    <i class="fa-solid fa-graduation-cap"></i> <span data-i18n="tabStudent">Student & Scholarships</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-savings">
-                    <i class="fa-solid fa-piggy-bank"></i> <span data-i18n="tabSavings">Savings Goals</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-emi">
-                    <i class="fa-solid fa-calculator"></i> <span data-i18n="tabEmi">EMI Loan Compare</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-subscriptions">
-                    <i class="fa-solid fa-repeat"></i> <span data-i18n="tabSubs">Subscriptions</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-literacy">
-                    <i class="fa-solid fa-book-open-reader"></i> <span data-i18n="tabLiteracy">Financial Literacy</span>
-                </button>
-                <button type="button" class="tab-btn" data-tab="tab-register">
-                    <i class="fa-solid fa-id-card"></i> <span data-i18n="tabRegister">Registration</span>
-                </button>
-            </div>
-        </nav>
+        <!-- STARTUP HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fa-solid fa-sparkles"></i> <span>#1 Smart Financial Platform for Students & Professionals</span>
+                    </div>
+                    <h1 class="hero-headline">
+                        Empower Your Financial Future with <span class="gradient-text">Smart Insights & Scholarships</span>
+                    </h1>
+                    <p class="hero-subtext">
+                        Track expenses, calculate loan EMIs, plan savings goals, find verified scholarships, and master financial literacy — all in one modern, intuitive platform.
+                    </p>
+                    <div class="hero-ctas">
+                        <button type="button" class="btn-primary hero-btn" id="heroGetStartedBtn">
+                            <span>Get Started Free</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn-hero-secondary" id="heroExploreScholarshipsBtn">
+                            <i class="fa-solid fa-graduation-cap"></i> <span>Explore Scholarships</span>
+                        </button>
+                    </div>
+                    <div class="hero-trust-badges">
+                        <span><i class="fa-solid fa-bolt glow-green"></i> Supabase Powered</span>
+                        <span><i class="fa-solid fa-lock glow-indigo"></i> Bank-Grade Security</span>
+                        <span><i class="fa-solid fa-graduation-cap glow-cyan"></i> 100% Free for Students</span>
+                    </div>
+                </div>
 
-        <!-- Main Content Modules -->
-        <main class="content-area">
+                <!-- Hero Interactive Visual Showcase -->
+                <div class="hero-visual">
+                    <div class="hero-glass-preview glass-card">
+                        <div class="preview-header">
+                            <div class="preview-dots"><span></span><span></span><span></span></div>
+                            <div class="preview-title">FinHub Live Dashboard</div>
+                        </div>
+                        <div class="preview-metrics">
+                            <div class="mini-stat-card">
+                                <span class="stat-lbl">Monthly Balance</span>
+                                <h4 class="stat-val text-green">₹48,500</h4>
+                            </div>
+                            <div class="mini-stat-card">
+                                <span class="stat-lbl">Savings Rate</span>
+                                <h4 class="stat-val text-indigo">38.5%</h4>
+                            </div>
+                            <div class="mini-stat-card">
+                                <span class="stat-lbl">Eligible Aid</span>
+                                <h4 class="stat-val text-cyan">₹2,00,000</h4>
+                            </div>
+                        </div>
+                        <div class="preview-chart-box">
+                            <div class="bar-chart-sim">
+                                <div class="bar b1" style="height: 45%;"><span>Food</span></div>
+                                <div class="bar b2" style="height: 75%;"><span>Rent</span></div>
+                                <div class="bar b3" style="height: 30%;"><span>Transit</span></div>
+                                <div class="bar b4" style="height: 90%;"><span>Savings</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT MODULES -->
+        <main class="main-content-wrapper">
 
             <!-- ======================================================= -->
-            <!-- MODULE 1: EXPENSE & BUDGET MANAGER                      -->
+            <!-- MODULE 1: USER PERSONAL DASHBOARD                       -->
             <!-- ======================================================= -->
             <section class="tab-panel active" id="tab-dashboard">
-                
-                <!-- Financial Metrics Summary -->
+                <div class="section-title-row">
+                    <div>
+                        <h2><i class="fa-solid fa-chart-pie glow-icon"></i> <span data-i18n="dashboardTitle">User Personal Dashboard</span></h2>
+                        <p data-i18n="dashboardSub">Overview of your personal income, expenses, applied scholarships, and savings goals.</p>
+                    </div>
+                    <button type="button" class="btn-action" id="openAdminDbFromUserBtn" style="display: none;">
+                        <i class="fa-solid fa-database"></i> Admin Database View
+                    </button>
+                </div>
+
+                <!-- Personal Overview Cards -->
                 <div class="metrics-grid">
                     <div class="metric-card glass-card">
                         <div class="metric-icon income"><i class="fa-solid fa-arrow-trend-up"></i></div>
                         <div class="metric-info">
-                            <span class="metric-label" data-i18n="totalIncome">Total Income</span>
-                            <h3 class="metric-value" id="totalIncomeVal">₹0</h3>
+                            <span class="metric-label">My Total Income</span>
+                            <h3 class="metric-value" id="userIncomeVal">₹0</h3>
                         </div>
                     </div>
                     <div class="metric-card glass-card">
                         <div class="metric-icon expense"><i class="fa-solid fa-arrow-trend-down"></i></div>
                         <div class="metric-info">
-                            <span class="metric-label" data-i18n="totalExpense">Total Expenses</span>
-                            <h3 class="metric-value" id="totalExpenseVal">₹0</h3>
+                            <span class="metric-label">My Total Expenses</span>
+                            <h3 class="metric-value" id="userExpenseVal">₹0</h3>
                         </div>
                     </div>
                     <div class="metric-card glass-card">
                         <div class="metric-icon savings"><i class="fa-solid fa-wallet"></i></div>
                         <div class="metric-info">
-                            <span class="metric-label" data-i18n="netSavings">Net Savings</span>
-                            <h3 class="metric-value" id="netSavingsVal">₹0</h3>
+                            <span class="metric-label">My Net Savings</span>
+                            <h3 class="metric-value" id="userNetSavingsVal">₹0</h3>
                         </div>
                     </div>
                     <div class="metric-card glass-card">
-                        <div class="metric-icon budget"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="metric-icon budget"><i class="fa-solid fa-graduation-cap"></i></div>
                         <div class="metric-info">
-                            <span class="metric-label" data-i18n="monthlyBudget">Monthly Budget</span>
-                            <h3 class="metric-value" id="monthlyBudgetVal">₹30,000</h3>
+                            <span class="metric-label">Applied Scholarships</span>
+                            <h3 class="metric-value" id="userAppliedCount">0</h3>
                         </div>
                     </div>
                 </div>
 
-                <!-- Budget Bar -->
+                <!-- My Applied Scholarships & Applications Status -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-file-signature"></i> My Scholarship Applications</h2>
+                        <p>Track the status of scholarships you have applied for.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Scholarship Title</th>
+                                    <th>Award Amount</th>
+                                    <th>Status</th>
+                                    <th>Applied Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userApplicationsBody">
+                                <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No applications submitted yet. Go to Scholarships tab to apply.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 2: EXPENSES & BUDGET MANAGER                     -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-expenses">
                 <div class="glass-card budget-bar-card">
                     <div class="budget-bar-header">
-                        <span><i class="fa-solid fa-gauge-high"></i> <span data-i18n="budgetUsage">Monthly Budget Limit Usage</span></span>
+                        <span><i class="fa-solid fa-gauge-high"></i> Monthly Budget Limit Usage</span>
                         <span id="budgetPercentText">0% Used</span>
                     </div>
                     <div class="progress-track large">
@@ -148,21 +251,21 @@
                     <!-- Add Transaction Form -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-circle-plus"></i> <span data-i18n="addTxTitle">Add Transaction</span></h2>
-                            <p data-i18n="addTxSub">Record income or expense entries into database.</p>
+                            <h2><i class="fa-solid fa-circle-plus"></i> Add Transaction</h2>
+                            <p>Record income or expense entries into database.</p>
                         </div>
                         <form id="expenseForm">
                             <div class="form-group">
-                                <label><i class="fa-solid fa-pen"></i> <span data-i18n="lblTitle">Title</span> *</label>
-                                <input type="text" id="txTitle" placeholder="e.g. Salary, Rent, Grocery" required>
+                                <label><i class="fa-solid fa-pen"></i> Title *</label>
+                                <input type="text" id="txTitle" placeholder="e.g. Salary, Rent, Books" required>
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> <span data-i18n="lblAmount">Amount (₹)</span> *</label>
-                                    <input type="number" id="txAmount" placeholder="1000" min="1" required>
+                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (₹) *</label>
+                                    <input type="number" id="txAmount" placeholder="1500" min="1" required>
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-list"></i> <span data-i18n="lblType">Type</span></label>
+                                    <label><i class="fa-solid fa-list"></i> Type</label>
                                     <select id="txType">
                                         <option value="expense">Expense</option>
                                         <option value="income">Income</option>
@@ -171,7 +274,7 @@
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-tags"></i> <span data-i18n="lblCategory">Category</span></label>
+                                    <label><i class="fa-solid fa-tags"></i> Category</label>
                                     <select id="txCategory">
                                         <option value="Food">Food & Dining</option>
                                         <option value="Rent">Rent & Housing</option>
@@ -184,21 +287,21 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-calendar"></i> <span data-i18n="lblDate">Date</span></label>
+                                    <label><i class="fa-solid fa-calendar"></i> Date</label>
                                     <input type="date" id="txDate">
                                 </div>
                             </div>
                             <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddTx">Add Transaction</span>
+                                <i class="fa-solid fa-plus"></i> Add Transaction
                             </button>
                         </form>
                     </div>
 
-                    <!-- Category Breakdown & List -->
+                    <!-- Transactions List Table -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-receipt"></i> <span data-i18n="recentTxTitle">Recent Transactions</span></h2>
-                            <p data-i18n="recentTxSub">Live sync with Supabase cloud database.</p>
+                            <h2><i class="fa-solid fa-receipt"></i> Recent Transactions</h2>
+                            <p>Live sync with Supabase cloud database.</p>
                         </div>
                         <div class="table-responsive">
                             <table class="users-table">
@@ -211,38 +314,36 @@
                                     </tr>
                                 </thead>
                                 <tbody id="txTableBody">
-                                    <!-- Dynamic Rows -->
+                                    <!-- Dynamic rows -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 2: STUDENT FINANCE & SCHOLARSHIP FINDER           -->
+            <!-- MODULE 3: STUDENT & SCHOLARSHIP DIRECTORY              -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-scholarships">
-                
                 <!-- Student Budget Calculator -->
                 <div class="glass-card margin-bottom">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-graduation-cap glow-icon"></i> <span data-i18n="studentPlannerTitle">Student Finance & Allowance Planner</span></h2>
-                        <p data-i18n="studentPlannerSub">Calculate semester budgets and recommended monthly spending limits for students.</p>
+                        <h2><i class="fa-solid fa-graduation-cap glow-icon"></i> Student Finance & Allowance Planner</h2>
+                        <p>Calculate semester budgets and recommended monthly spending limits for students.</p>
                     </div>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label><i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="monthlyAllowance">Monthly Allowance / Stipend (₹)</span></label>
+                            <label><i class="fa-solid fa-hand-holding-dollar"></i> Monthly Allowance / Stipend (₹)</label>
                             <input type="number" id="stuAllowance" value="12000">
                         </div>
                         <div class="form-group">
-                            <label><i class="fa-solid fa-book"></i> <span data-i18n="tuitionFee">Semester Tuition & Exam Fee (₹)</span></label>
+                            <label><i class="fa-solid fa-book"></i> Semester Tuition & Exam Fee (₹)</label>
                             <input type="number" id="stuTuition" value="45000">
                         </div>
                     </div>
                     <div class="student-calc-result" id="stuCalcResult">
-                        <div class="calc-badge"><i class="fa-solid fa-lightbulb"></i> Recommended Monthly Cap: <strong>₹8,400</strong></div>
+                        <div class="calc-badge"><i class="fa-solid fa-lightbulb"></i> Recommended Monthly Spend Cap: <strong>₹8,400</strong></div>
                         <div class="calc-badge"><i class="fa-solid fa-piggy-bank"></i> Semester Savings Potential: <strong>₹21,600</strong></div>
                     </div>
                 </div>
@@ -250,8 +351,8 @@
                 <!-- Scholarship Finder -->
                 <div class="glass-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-award"></i> <span data-i18n="scholarshipTitle">Active Scholarships & Financial Aid Directory</span></h2>
-                        <p data-i18n="scholarshipSub">Discover government, corporate, and merit scholarships for higher education.</p>
+                        <h2><i class="fa-solid fa-award"></i> Active Scholarships Directory</h2>
+                        <p>Discover government, corporate, and merit scholarships for higher education.</p>
                     </div>
 
                     <div class="scholarship-filter-bar">
@@ -272,56 +373,6 @@
                         <!-- Dynamic Scholarship Cards -->
                     </div>
                 </div>
-
-            </section>
-
-            <!-- ======================================================= -->
-            <!-- MODULE 3: SAVINGS GOAL PLANNER                           -->
-            <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-savings">
-                <div class="grid-2col">
-                    <!-- Create Savings Goal Form -->
-                    <div class="glass-card">
-                        <div class="card-header">
-                            <h2><i class="fa-solid fa-bullseye glow-icon"></i> <span data-i18n="createGoalTitle">Set New Savings Goal</span></h2>
-                            <p data-i18n="createGoalSub">Track target goals like Emergency Fund, Laptop, or College Tuition.</p>
-                        </div>
-                        <form id="savingsForm">
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-star"></i> <span data-i18n="lblGoalName">Goal Name</span> *</label>
-                                <input type="text" id="goalName" placeholder="e.g. New Laptop Fund" required>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-flag"></i> <span data-i18n="lblTargetAmount">Target Amount (₹)</span> *</label>
-                                    <input type="number" id="goalTarget" placeholder="60000" required>
-                                </div>
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-wallet"></i> <span data-i18n="lblInitialSaved">Initial Savings (₹)</span></label>
-                                    <input type="number" id="goalInitial" placeholder="10000" value="0">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-calendar-day"></i> <span data-i18n="lblTargetDate">Target Date</span></label>
-                                <input type="date" id="goalDate">
-                            </div>
-                            <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddGoal">Create Goal</span>
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Savings Goals List Cards -->
-                    <div class="glass-card">
-                        <div class="card-header">
-                            <h2><i class="fa-solid fa-vault"></i> <span data-i18n="yourGoalsTitle">Your Active Goals</span></h2>
-                            <p data-i18n="yourGoalsSub">Deposit funds and monitor your visual progress rings.</p>
-                        </div>
-                        <div class="savings-cards-container" id="savingsCardsContainer">
-                            <!-- Dynamic Savings Goal Cards -->
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- ======================================================= -->
@@ -330,12 +381,11 @@
             <section class="tab-panel" id="tab-emi">
                 <div class="glass-card margin-bottom">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-scale-balanced glow-icon"></i> <span data-i18n="emiTitle">Side-by-Side Loan EMI Comparison Calculator</span></h2>
-                        <p data-i18n="emiSub">Compare monthly EMI, total interest, and total payout between 2 bank loan offers.</p>
+                        <h2><i class="fa-solid fa-scale-balanced glow-icon"></i> Side-by-Side Loan EMI Comparison Calculator</h2>
+                        <p>Compare monthly EMI, total interest, and total payout between 2 bank loan offers.</p>
                     </div>
 
                     <div class="loan-comparison-grid">
-                        <!-- Loan Offer A -->
                         <div class="loan-card loan-a">
                             <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer A (Bank 1)</div>
                             <div class="form-group">
@@ -359,7 +409,6 @@
                             </div>
                         </div>
 
-                        <!-- Loan Offer B -->
                         <div class="loan-card loan-b">
                             <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer B (Bank 2)</div>
                             <div class="form-group">
@@ -384,114 +433,98 @@
                         </div>
                     </div>
 
-                    <!-- Comparison Verdict Banner -->
                     <div class="comparison-verdict" id="comparisonVerdict">
-                        <i class="fa-solid fa-trophy"></i> <span id="verdictText">Calculating comparison recommendation...</span>
+                        <i class="fa-solid fa-trophy"></i> <span id="verdictText">Calculating recommendation...</span>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 5: SUBSCRIPTION TRACKER                          -->
+            <!-- MODULE 5: SAVINGS GOAL PLANNER                           -->
             <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-subscriptions">
+            <section class="tab-panel" id="tab-savings">
                 <div class="grid-2col">
-                    <!-- Add Subscription Form -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-repeat glow-icon"></i> <span data-i18n="addSubTitle">Track New Subscription</span></h2>
-                            <p data-i18n="addSubSub">Monitor monthly SaaS, streaming services, and membership recurring burn.</p>
+                            <h2><i class="fa-solid fa-bullseye glow-icon"></i> Set New Savings Goal</h2>
+                            <p>Track target goals like Emergency Fund, Laptop, or College Tuition.</p>
                         </div>
-                        <form id="subForm">
+                        <form id="savingsForm">
                             <div class="form-group">
-                                <label><i class="fa-solid fa-tv"></i> <span data-i18n="lblServiceName">Service Name</span> *</label>
-                                <input type="text" id="subName" placeholder="e.g. Netflix, Spotify, ChatGPT" required>
+                                <label><i class="fa-solid fa-star"></i> Goal Name *</label>
+                                <input type="text" id="goalName" placeholder="e.g. Laptop Fund" required>
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-tag"></i> <span data-i18n="lblSubAmount">Amount (₹)</span> *</label>
-                                    <input type="number" id="subAmount" placeholder="499" required>
+                                    <label><i class="fa-solid fa-flag"></i> Target Amount (₹) *</label>
+                                    <input type="number" id="goalTarget" placeholder="60000" required>
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-clock"></i> Cycle</label>
-                                    <select id="subCycle">
-                                        <option value="monthly">Monthly</option>
-                                        <option value="yearly">Yearly</option>
-                                    </select>
+                                    <label><i class="fa-solid fa-wallet"></i> Initial Savings (₹)</label>
+                                    <input type="number" id="goalInitial" value="0">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label><i class="fa-solid fa-calendar"></i> Next Renewal Date</label>
-                                <input type="date" id="subDate">
-                            </div>
                             <button type="submit" class="btn-primary">
-                                <i class="fa-solid fa-plus"></i> Add Subscription
+                                <i class="fa-solid fa-plus"></i> Create Savings Goal
                             </button>
                         </form>
                     </div>
 
-                    <!-- Subscriptions List & Total Monthly Burn -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-fire-flame-curved"></i> Monthly Recurring Burn: <span id="totalSubBurn">₹0</span></h2>
-                            <p>Active subscriptions automatically tracked.</p>
+                            <h2><i class="fa-solid fa-vault"></i> Your Active Savings Goals</h2>
+                            <p>Deposit funds and monitor your progress.</p>
                         </div>
-                        <div class="subs-list" id="subsList">
-                            <!-- Dynamic Subscriptions -->
+                        <div class="savings-cards-container" id="savingsCardsContainer">
+                            <!-- Dynamic Cards -->
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 6: FINANCIAL LITERACY & KNOWLEDGE QUIZ           -->
+            <!-- MODULE 6: FINANCIAL LITERACY PLATFORM                    -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-literacy">
-                
-                <!-- Bite-sized Guides -->
                 <div class="glass-card margin-bottom">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-book-open glow-icon"></i> Financial Literacy Guides (वित्तीय साक्षरता)</h2>
-                        <p>Essential money rules every individual and student must know.</p>
+                        <p>Essential financial principles every individual should master.</p>
                     </div>
-
                     <div class="guides-grid">
                         <div class="guide-card">
                             <div class="guide-icon"><i class="fa-solid fa-pie-chart"></i></div>
-                            <h4>The 50/30/20 Budgeting Rule</h4>
-                            <p>Allocate 50% of income to Needs (Rent, Food), 30% to Wants (Fun, Shopping), and 20% directly to Savings & Investments.</p>
+                            <h4>The 50/30/20 Rule</h4>
+                            <p>Allocate 50% to Needs (Rent, Food), 30% to Wants (Shopping, Fun), and 20% directly to Savings & Investments.</p>
                         </div>
                         <div class="guide-card">
                             <div class="guide-icon"><i class="fa-solid fa-chart-line"></i></div>
-                            <h4>Power of SIP & Compounding</h4>
-                            <p>Investing just ₹1,000/month in a Systematic Investment Plan (SIP) @ 12% return for 20 years yields over ₹10 Lakhs!</p>
+                            <h4>SIP & Compounding</h4>
+                            <p>Investing ₹1,000/month in a SIP @ 12% return for 20 years yields over ₹10 Lakhs!</p>
                         </div>
                         <div class="guide-card">
                             <div class="guide-icon"><i class="fa-solid fa-shield-halved"></i></div>
                             <h4>Credit Score (CIBIL) 101</h4>
-                            <p>Maintain a credit score above 750 by paying credit card bills & EMIs on time to unlock low-interest loans.</p>
+                            <p>Maintain a credit score above 750 by paying credit card bills & EMIs on time.</p>
                         </div>
                         <div class="guide-card">
                             <div class="guide-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                            <h4>Tax Saving Basics (Section 80C)</h4>
-                            <p>Save up to ₹1.5 Lakhs in income tax using ELSS mutual funds, PPF, and National Pension Scheme (NPS).</p>
+                            <h4>Tax Saving (Section 80C)</h4>
+                            <p>Save up to ₹1.5 Lakhs in income tax using ELSS mutual funds, PPF, and NPS.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Financial Knowledge Quiz -->
+                <!-- Financial Literacy Quiz -->
                 <div class="glass-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-brain glow-icon"></i> Interactive Financial Literacy Quiz</h2>
+                        <h2><i class="fa-solid fa-brain glow-icon"></i> Financial Knowledge Quiz</h2>
                         <p>Test your knowledge and earn your Financial IQ score.</p>
                     </div>
-
                     <div id="quizContainer">
                         <div class="quiz-question-card" id="quizCard">
                             <h3 id="quizQuestion">Question loading...</h3>
-                            <div class="quiz-options" id="quizOptions">
-                                <!-- Dynamic Options -->
-                            </div>
+                            <div class="quiz-options" id="quizOptions"></div>
                         </div>
                         <div class="quiz-score-box" id="quizScoreBox" style="display: none;">
                             <i class="fa-solid fa-trophy score-icon"></i>
@@ -501,66 +534,133 @@
                         </div>
                     </div>
                 </div>
-
-            </section>
-
-            <!-- ======================================================= -->
-            <!-- MODULE 7: USER REGISTRATION                            -->
-            <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-register">
-                <div class="glass-card max-width-card">
-                    <div class="card-header">
-                        <h2>Create Your FinHub Account</h2>
-                        <p>Register your account into the Supabase database to sync all financial entries.</p>
-                    </div>
-                    <form id="registrationForm" novalidate>
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label><i class="fa-solid fa-user"></i> Full Name *</label>
-                                <input type="text" id="fullName" required placeholder="John Doe">
-                            </div>
-                            <div class="input-group">
-                                <label><i class="fa-solid fa-user-tie"></i> Father's Name *</label>
-                                <input type="text" id="fatherName" required placeholder="Robert Doe">
-                            </div>
-                            <div class="input-group">
-                                <label><i class="fa-solid fa-envelope"></i> Email Address *</label>
-                                <input type="email" id="email" required placeholder="john@example.com">
-                            </div>
-                            <div class="input-group">
-                                <label><i class="fa-solid fa-phone"></i> Phone Number</label>
-                                <input type="tel" id="phone" placeholder="+91 98765 43210">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-primary margin-top">
-                            <i class="fa-solid fa-paper-plane"></i> Register Account
-                        </button>
-                    </form>
-                </div>
             </section>
 
         </main>
 
-        <!-- Registered Users Database Modal -->
-        <div class="modal-overlay" id="usersModal">
+        <!-- ======================================================= -->
+        <!-- AUTH MODALS                                             -->
+        <!-- ======================================================= -->
+
+        <!-- 1. ADMIN PORTAL LOGIN MODAL (Gated for admin kumarshekharyadav9931@gmail.com) -->
+        <div class="modal-overlay" id="adminAuthModal">
+            <div class="modal-content glass-card auth-modal-card">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fa-solid fa-shield-halved glow-icon"></i>
+                        <h3>Admin Portal Login</h3>
+                    </div>
+                    <button type="button" class="modal-close" id="closeAdminAuthBtn">&times;</button>
+                </div>
+                <p class="modal-subtitle">Authorized Admin access required to view database records.</p>
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Admin Email ID *</label>
+                        <input type="email" id="adminEmail" required placeholder="kumarshekharyadav9931@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-lock"></i> Admin Password *</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="adminPassword" required placeholder="••••••••">
+                            <button type="button" class="toggle-password" id="toggleAdminPassBtn"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-key"></i> Verify & Access Admin Dashboard
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. USER AUTH MODAL (Sign In / Sign Up) -->
+        <div class="modal-overlay" id="userAuthModal">
+            <div class="modal-content glass-card auth-modal-card">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fa-solid fa-user glow-icon"></i>
+                        <h3 id="userAuthModalTitle">User Sign In</h3>
+                    </div>
+                    <button type="button" class="modal-close" id="closeUserAuthBtn">&times;</button>
+                </div>
+
+                <div class="auth-tabs">
+                    <button type="button" class="auth-tab-btn active" id="tabSignInBtn">Sign In</button>
+                    <button type="button" class="auth-tab-btn" id="tabSignUpBtn">Create Account</button>
+                </div>
+
+                <!-- Sign In Form -->
+                <form id="userSignInForm">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Email Address *</label>
+                        <input type="email" id="signInEmail" required placeholder="user@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-lock"></i> Password *</label>
+                        <input type="password" id="signInPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-right-to-bracket"></i> Sign In to User Portal
+                    </button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="userSignUpForm" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user"></i> Full Name *</label>
+                        <input type="text" id="signUpName" required placeholder="Shekhar Kumar">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user-tie"></i> Father's Name *</label>
+                        <input type="text" id="signUpFather" required placeholder="Rajesh Kumar">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Email Address *</label>
+                        <input type="email" id="signUpEmail" required placeholder="shekhar@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="signUpPhone" placeholder="+91 98765 43210">
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-user-plus"></i> Register & Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. ADMIN DATABASE RECORDS DASHBOARD MODAL -->
+        <div class="modal-overlay" id="adminDbModal">
             <div class="modal-content glass-card">
                 <div class="modal-header">
-                    <h3><i class="fa-solid fa-database"></i> Registered Supabase Records</h3>
-                    <button type="button" class="modal-close" id="closeModalBtn">&times;</button>
+                    <div class="modal-title">
+                        <i class="fa-solid fa-database glow-icon"></i>
+                        <h3>Registered Supabase Database Records</h3>
+                        <span class="badge-pill" id="adminDbCountBadge">0 Records</span>
+                    </div>
+                    <button type="button" class="modal-close" id="closeAdminDbBtn">&times;</button>
                 </div>
-                <div class="modal-body" id="modalBody">
+                <div class="modal-toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="adminDbSearchInput" placeholder="Search registered database users...">
+                    </div>
+                    <button type="button" class="btn-action" id="exportAdminCsvBtn">
+                        <i class="fa-solid fa-file-csv"></i> Export CSV
+                    </button>
+                </div>
+                <div class="modal-body">
                     <div class="table-responsive">
                         <table class="users-table">
                             <thead>
                                 <tr>
                                     <th>Full Name</th>
                                     <th>Father's Name</th>
-                                    <th>Email</th>
+                                    <th>Email Address</th>
                                     <th>Phone</th>
-                                    <th>Date</th>
+                                    <th>Registered Date</th>
                                 </tr>
                             </thead>
-                            <tbody id="usersTableBody">
+                            <tbody id="adminDbTableBody">
                                 <!-- Dynamic rows -->
                             </tbody>
                         </table>
@@ -569,7 +669,7 @@
             </div>
         </div>
 
-        <!-- Toast Notification Container -->
+        <!-- Toast Notifications Container -->
         <div class="toast-container" id="toastContainer"></div>
 
     </div>
