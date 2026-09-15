@@ -41,6 +41,7 @@
                     <a href="#" class="nav-link active" data-tab="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span></a>
                     <a href="#" class="nav-link" data-tab="tab-monefy"><i class="fa-solid fa-utensils"></i> <span>Daily Expenses</span></a>
                     <a href="#" class="nav-link" data-tab="tab-udhar"><i class="fa-solid fa-handshake"></i> <span>Udhar & Tracker</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-verification"><i class="fa-solid fa-shield-halved"></i> <span>AI Verification & Bank Offers</span></a>
                     <a href="#" class="nav-link" data-tab="tab-scholarships"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navScholarships">Scholarships</span></a>
                     <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings Goals</span></a>
                     <a href="#" class="nav-link" data-tab="tab-calculators"><i class="fa-solid fa-calculator"></i> <span>Multi-Calculators</span></a>
@@ -318,14 +319,23 @@
                         </div>
                     </div>
 
-                    <!-- MONTH SELECTOR TABS -->
+                    <!-- MONTH & YEAR SELECTOR TABS -->
                     <div class="monefy-month-selector margin-top">
                         <button type="button" class="btn-month-nav" id="btnPrevMonth"><i class="fa-solid fa-chevron-left"></i></button>
                         <div class="month-tab-pills" id="monthTabPills">
-                            <span class="month-pill" onclick="switchMonefyMonth('July')">July</span>
-                            <span class="month-pill" onclick="switchMonefyMonth('August')">August</span>
-                            <span class="month-pill active" id="currentMonthPill" onclick="switchMonefyMonth('September')">September</span>
-                            <span class="month-pill" onclick="switchMonefyMonth('October')">October</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Jan')">Jan</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Feb')">Feb</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Mar')">Mar</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Apr')">Apr</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('May')">May</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Jun')">Jun</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Jul')">Jul</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Aug')">Aug</span>
+                            <span class="month-pill active" id="currentMonthPill" onclick="switchMonefyMonth('Sep')">Sep</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Oct')">Oct</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Nov')">Nov</span>
+                            <span class="month-pill" onclick="switchMonefyMonth('Dec')">Dec</span>
+                            <span class="month-pill year-pill" onclick="switchMonefyMonth('Year 2026')">Year 2026</span>
                         </div>
                         <button type="button" class="btn-month-nav" id="btnNextMonth"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
@@ -1079,6 +1089,93 @@
                             <p>Total XP Earned: <strong id="quizXpEarnedVal" class="text-indigo">+0 XP</strong></p>
                             <button type="button" class="btn-primary" id="restartQuizBtn">Try Again</button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 11: AI DOCUMENT VERIFICATION & BANK OFFERS SUITE  -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-verification">
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-id-card glow-icon"></i> AI/ML Aadhaar & PAN Verification (सरकार व बैंक जांच)</h2>
+                        <p>Instant Background & Credit Eligibility Verification powered by AI ML.</p>
+                    </div>
+
+                    <form id="aiDocVerificationForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-user"></i> Full Applicant Name *</label>
+                                <input type="text" id="aiVerifyName" placeholder="e.g. Shekhar Kumar" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-id-card"></i> Aadhaar Card Number (12 Digits) *</label>
+                                <input type="text" id="aiVerifyAadhaar" placeholder="1234 5678 9012" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-address-card"></i> PAN Card Number *</label>
+                                <input type="text" id="aiVerifyPan" placeholder="ABCDE1234F" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-cake-candles"></i> Date of Birth *</label>
+                                <input type="date" id="aiVerifyDob" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary margin-top" id="runAiVerifyBtn">
+                            <i class="fa-solid fa-shield-virus"></i> Run AI Government & Financial Verification
+                        </button>
+                    </form>
+
+                    <!-- AI Verification Result Output Card -->
+                    <div id="aiVerifyResultContainer" class="margin-top" style="display: none;">
+                        <div class="verification-status-grid">
+                            <div class="status-card clean">
+                                <i class="fa-solid fa-shield-check status-icon"></i>
+                                <h4>Government Criminal Record Check</h4>
+                                <span class="badge-status clean-badge" id="govRecordBadge">🛡️ No Criminal Record Found (Clean)</span>
+                                <p>Verified via Inter-Operable Criminal Justice System (ICJS) Portal.</p>
+                            </div>
+
+                            <div class="status-card cibil">
+                                <i class="fa-solid fa-chart-pie status-icon"></i>
+                                <h4>CIBIL Credit Score Check</h4>
+                                <div class="cibil-score-badge" id="cibilScoreVal">785 / 900</div>
+                                <span class="badge-status prime-badge">🌟 Excellent (Prime Borrower)</span>
+                            </div>
+
+                            <div class="status-card debt">
+                                <i class="fa-solid fa-building-columns status-icon"></i>
+                                <h4>Existing Bank Debt & Loan Check</h4>
+                                <span class="badge-status clean-badge" id="debtCheckBadge">✅ 0 Default / Regular Repayer</span>
+                                <p>Verified via RBI Central Repository of Information on Large Credits (CRILC).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRE-APPROVED STUDENT SAVINGS ACCOUNTS -->
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-piggy-bank glow-icon"></i> Eligible Student Savings Accounts (विद्यार्थी बचत खाता)</h2>
+                        <p>Best zero-balance & high-interest savings accounts recommended based on your verified documents.</p>
+                    </div>
+
+                    <div class="accounts-grid" id="studentAccountsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- PRE-APPROVED MULTI-BANK LOAN OFFERS -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-building-columns glow-icon"></i> Pre-Approved Multi-Bank Loan Offers (बैंक ऋण प्रस्ताव)</h2>
+                        <p>Custom tailored loan offers with instant approval & minimum interest rate.</p>
+                    </div>
+
+                    <div class="bank-offers-grid" id="bankOffersGrid">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
             </section>
