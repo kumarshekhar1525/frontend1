@@ -33,20 +33,26 @@
                     <div class="logo-icon"><i class="fa-solid fa-coins"></i></div>
                     <div class="logo-text">
                         <span class="brand-name">FinHub</span>
-                        <span class="brand-badge">SaaS v3.5</span>
+                        <span class="brand-badge">SaaS v4.0</span>
                     </div>
                 </div>
 
                 <nav class="nav-links" id="navLinks">
                     <a href="#" class="nav-link active" data-tab="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span></a>
                     <a href="#" class="nav-link" data-tab="tab-monefy"><i class="fa-solid fa-utensils"></i> <span>Daily Expenses</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-udhar"><i class="fa-solid fa-handshake"></i> <span>Udhar & Money Tracker</span></a>
                     <a href="#" class="nav-link" data-tab="tab-scholarships"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navScholarships">Scholarships</span></a>
                     <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings Goals</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-emi"><i class="fa-solid fa-calculator"></i> <span data-i18n="navEMI">EMI Compare</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-calculators"><i class="fa-solid fa-calculator"></i> <span>Calculators (EMI/SIP)</span></a>
                     <a href="#" class="nav-link" data-tab="tab-literacy"><i class="fa-solid fa-book-open-reader"></i> <span data-i18n="navLiteracy">Literacy</span></a>
                 </nav>
 
                 <div class="nav-actions">
+                    <!-- Apply Loan Button -->
+                    <button type="button" class="btn-loan-cta" id="openLoanModalBtn">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> Apply Loan
+                    </button>
+
                     <div class="system-badge" id="systemBadge">
                         <span class="status-dot online pulsing"></span>
                         <span id="systemStatusText">Online</span>
@@ -213,11 +219,9 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 2: MONEFY PRIVATE DAILY EXPENSE TRACKER & CALCULATOR -->
+            <!-- MODULE 2: MONEFY PRIVATE DAILY EXPENSE TRACKER          -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-monefy">
-                
-                <!-- Monefy Overview Stat Cards -->
                 <div class="metrics-grid">
                     <div class="metric-card glass-card">
                         <div class="metric-icon expense"><i class="fa-solid fa-calendar-day"></i></div>
@@ -235,7 +239,6 @@
                     </div>
                 </div>
 
-                <!-- Monefy Category Percentage Analytics Bar -->
                 <div class="glass-card">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-chart-pie glow-icon"></i> Student Spending Category Analytics (खर्च विश्लेषक)</h2>
@@ -261,7 +264,6 @@
                 </div>
 
                 <div class="grid-2col">
-                    <!-- Monefy Form -->
                     <div class="glass-card">
                         <div class="card-header">
                             <h2><i class="fa-solid fa-pen-to-square"></i> Log Daily Expense (दैनिक खर्च लिखें)</h2>
@@ -289,9 +291,16 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <!-- Dynamic Custom "Other" Detail Note Input -->
+                            <div class="form-group" id="customOtherWrapper" style="display: none;">
+                                <label><i class="fa-solid fa-pen-nib"></i> Specify Custom Detail (Kis chij me khrch ho rha hai?) *</label>
+                                <input type="text" id="customOtherNote" placeholder="Write exact detail for Other category...">
+                            </div>
+
                             <div class="form-group">
                                 <label><i class="fa-solid fa-calendar"></i> Date (Kis date pe khrch kiya?)</label>
-                                <input type="date" id="dailyDate">
+                                <input type="date" id="dailyDate" value="2026-09-15">
                             </div>
                             <button type="submit" class="btn-primary">
                                 <i class="fa-solid fa-plus"></i> Save Daily Expense Entry
@@ -299,7 +308,6 @@
                         </form>
                     </div>
 
-                    <!-- Daily Expenses Table -->
                     <div class="glass-card">
                         <div class="card-header">
                             <h2><i class="fa-solid fa-list-check"></i> Private Daily Expenses Log</h2>
@@ -313,12 +321,9 @@
                                         <th>Category</th>
                                         <th>Date</th>
                                         <th>Amount</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="dailyExpenseTableBody">
-                                    <!-- Dynamic rows -->
-                                </tbody>
+                                <tbody id="dailyExpenseTableBody"></tbody>
                             </table>
                         </div>
                     </div>
@@ -326,7 +331,83 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 3: SCHOLARSHIP DIRECTORY                        -->
+            <!-- MODULE 3: UDHAR & MONEY TRACKER (GIVEN / TAKEN / RECEIVED) -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-udhar">
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-handshake glow-icon"></i> Udhar & Cashflow Tracker (उधार एवं पैसे का हिसाब)</h2>
+                        <p>Track money lent (उधार दिया), money borrowed (उधार लिया), and money received (मासिक खर्च हेतु प्राप्त राशि).</p>
+                    </div>
+
+                    <form id="udharForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-user"></i> Person / Sender Name *</label>
+                                <input type="text" id="udharPerson" placeholder="e.g. Ramesh, Papa, Rahul" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount (₹) *</label>
+                                <input type="number" id="udharAmount" placeholder="1000" min="1" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-right-left"></i> Transaction Type</label>
+                                <select id="udharType">
+                                    <option value="given">📤 Udhar Diya (Lent Money - Given to someone)</option>
+                                    <option value="taken">📥 Udhar Liya (Borrowed Money - Taken from someone)</option>
+                                    <option value="received">💸 Money Received (Paisa Mila - Received for expenses)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-calendar"></i> Date</label>
+                                <input type="date" id="udharDate" value="2026-09-15">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-plus"></i> Record Udhar Entry
+                        </button>
+                    </form>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Udhar Diya (Lent Money) Table -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-arrow-up-right-from-square text-red"></i> 📤 Udhar Diya (Lent Money)</h2>
+                            <p>Money you gave to others.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="users-table">
+                                <thead>
+                                    <tr><th>To Whom</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+                                </thead>
+                                <tbody id="udharGivenTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Udhar Liya (Borrowed Money) Table -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-arrow-down-left-and-arrow-up-right-to-inside text-amber"></i> 📥 Udhar Liya (Borrowed Money)</h2>
+                            <p>Money you borrowed from others.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="users-table">
+                                <thead>
+                                    <tr><th>From Whom</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+                                </thead>
+                                <tbody id="udharTakenTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 4: SCHOLARSHIPS DIRECTORY                       -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-scholarships">
                 <div class="glass-card margin-bottom">
@@ -375,7 +456,7 @@
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 4: SAVINGS GOAL PLANNER (FIXED)                 -->
+            <!-- MODULE 5: SAVINGS GOALS & SAVINGS PURPOSE TABLE         -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-savings">
                 <div class="grid-2col">
@@ -386,8 +467,8 @@
                         </div>
                         <form id="savingsForm">
                             <div class="form-group">
-                                <label><i class="fa-solid fa-star"></i> Goal Name *</label>
-                                <input type="text" id="goalName" placeholder="e.g. Laptop Fund, Emergency Fund" required>
+                                <label><i class="fa-solid fa-star"></i> Goal Name / Purpose *</label>
+                                <input type="text" id="goalName" placeholder="e.g. Laptop Fund, Emergency Fund, Higher Education" required>
                             </div>
                             <div class="form-grid">
                                 <div class="form-group">
@@ -399,90 +480,172 @@
                                     <input type="number" id="goalInitial" placeholder="1000" value="0">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-shapes"></i> Savings Purpose Category</label>
+                                <select id="goalCategory">
+                                    <option value="Emergency">🚨 Emergency Fund</option>
+                                    <option value="Education">🎓 Higher Education / Tuition</option>
+                                    <option value="Gadgets">💻 Laptop / Phone / Gadget</option>
+                                    <option value="Property">🏠 Home / Property</option>
+                                    <option value="Travel">✈️ Travel / Vacation</option>
+                                    <option value="General">🌟 General Savings</option>
+                                </select>
+                            </div>
                             <button type="submit" class="btn-primary" id="createGoalBtn">
                                 <i class="fa-solid fa-plus"></i> Create Savings Goal
                             </button>
                         </form>
                     </div>
 
+                    <!-- Savings Purpose Table Beside Creation Form -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2><i class="fa-solid fa-vault"></i> Your Active Savings Goals</h2>
-                            <p>Deposit funds and monitor your visual progress bars.</p>
+                            <h2><i class="fa-solid fa-table-list"></i> Savings Purpose & Reason Table (बचत का कारण)</h2>
+                            <p>Lists why you are saving money and progress details.</p>
                         </div>
-                        <div class="savings-cards-container" id="savingsCardsContainer">
-                            <!-- Dynamic Cards -->
+                        <div class="table-responsive">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Savings Purpose</th>
+                                        <th>Category</th>
+                                        <th>Target</th>
+                                        <th>Saved</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="savingsPurposeTableBody"></tbody>
+                            </table>
                         </div>
+                        <div class="savings-cards-container margin-top" id="savingsCardsContainer"></div>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 5: EMI & LOAN COMPARISON CALCULATOR              -->
+            <!-- MODULE 6: MULTI-CALCULATOR (EMI + LUMPSUM + SIP)        -->
             <!-- ======================================================= -->
-            <section class="tab-panel" id="tab-emi">
-                <div class="glass-card margin-bottom">
+            <section class="tab-panel" id="tab-calculators">
+                <div class="glass-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-scale-balanced glow-icon"></i> Side-by-Side Loan EMI Comparison Calculator</h2>
-                        <p>Compare monthly EMI, total interest, and total payout between 2 bank loan offers.</p>
+                        <h2><i class="fa-solid fa-calculator glow-icon"></i> Smart Financial Multi-Calculator</h2>
+                        <p>Compute Loan EMIs, Lumpsum Mutual Fund growth, and Monthly SIP Investment Returns.</p>
                     </div>
 
-                    <div class="loan-comparison-grid">
-                        <div class="loan-card loan-a">
-                            <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer A (Bank 1)</div>
-                            <div class="form-group">
-                                <label>Loan Amount (₹)</label>
-                                <input type="number" id="loanAAmount" value="500000">
-                            </div>
-                            <div class="form-grid">
+                    <div class="calc-type-tabs">
+                        <button type="button" class="calc-tab-btn active" id="calcTabEmi">EMI Loan Compare</button>
+                        <button type="button" class="calc-tab-btn" id="calcTabSip">SIP Calculator</button>
+                        <button type="button" class="calc-tab-btn" id="calcTabLumpsum">Lumpsum Calculator</button>
+                    </div>
+
+                    <!-- EMI Panel -->
+                    <div id="panelEmi">
+                        <div class="loan-comparison-grid margin-top">
+                            <div class="loan-card loan-a">
+                                <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer A (Bank 1)</div>
                                 <div class="form-group">
-                                    <label>Interest Rate (% p.a.)</label>
-                                    <input type="number" id="loanARate" step="0.1" value="8.5">
+                                    <label>Loan Amount (₹)</label>
+                                    <input type="number" id="loanAAmount" value="500000">
                                 </div>
-                                <div class="form-group">
-                                    <label>Tenure (Years)</label>
-                                    <input type="number" id="loanATenure" value="5">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Interest Rate (% p.a.)</label>
+                                        <input type="number" id="loanARate" step="0.1" value="8.5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tenure (Years)</label>
+                                        <input type="number" id="loanATenure" value="5">
+                                    </div>
+                                </div>
+                                <div class="emi-result-box">
+                                    <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiAVal">₹0</strong></div>
+                                    <div class="emi-metric"><span>Total Interest:</span> <strong id="interestAVal">₹0</strong></div>
+                                    <div class="emi-metric"><span>Total Payment:</span> <strong id="totalAVal">₹0</strong></div>
                                 </div>
                             </div>
-                            <div class="emi-result-box">
-                                <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiAVal">₹0</strong></div>
-                                <div class="emi-metric"><span>Total Interest:</span> <strong id="interestAVal">₹0</strong></div>
-                                <div class="emi-metric"><span>Total Payment:</span> <strong id="totalAVal">₹0</strong></div>
+
+                            <div class="loan-card loan-b">
+                                <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer B (Bank 2)</div>
+                                <div class="form-group">
+                                    <label>Loan Amount (₹)</label>
+                                    <input type="number" id="loanBAmount" value="500000">
+                                </div>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Interest Rate (% p.a.)</label>
+                                        <input type="number" id="loanBRate" step="0.1" value="9.2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tenure (Years)</label>
+                                        <input type="number" id="loanBTenure" value="5">
+                                    </div>
+                                </div>
+                                <div class="emi-result-box">
+                                    <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiBVal">₹0</strong></div>
+                                    <div class="emi-metric"><span>Total Interest:</span> <strong id="interestBVal">₹0</strong></div>
+                                    <div class="emi-metric"><span>Total Payment:</span> <strong id="totalBVal">₹0</strong></div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="loan-card loan-b">
-                            <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer B (Bank 2)</div>
-                            <div class="form-group">
-                                <label>Loan Amount (₹)</label>
-                                <input type="number" id="loanBAmount" value="500000">
-                            </div>
-                            <div class="form-grid">
+                        <div class="comparison-verdict" id="comparisonVerdict">
+                            <i class="fa-solid fa-trophy"></i> <span id="verdictText">Calculating recommendation...</span>
+                        </div>
+                    </div>
+
+                    <!-- SIP Panel -->
+                    <div id="panelSip" style="display: none;" class="margin-top">
+                        <div class="grid-2col">
+                            <div>
                                 <div class="form-group">
-                                    <label>Interest Rate (% p.a.)</label>
-                                    <input type="number" id="loanBRate" step="0.1" value="9.2">
+                                    <label>Monthly Investment (₹)</label>
+                                    <input type="number" id="sipMonthly" value="5000">
                                 </div>
                                 <div class="form-group">
-                                    <label>Tenure (Years)</label>
-                                    <input type="number" id="loanBTenure" value="5">
+                                    <label>Expected Return Rate (% p.a.)</label>
+                                    <input type="number" id="sipRate" step="0.1" value="12">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time Period (Years)</label>
+                                    <input type="number" id="sipYears" value="10">
                                 </div>
                             </div>
-                            <div class="emi-result-box">
-                                <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiBVal">₹0</strong></div>
-                                <div class="emi-metric"><span>Total Interest:</span> <strong id="interestBVal">₹0</strong></div>
-                                <div class="emi-metric"><span>Total Payment:</span> <strong id="totalBVal">₹0</strong></div>
+                            <div class="emi-result-box" style="justify-content: center;">
+                                <div class="emi-metric"><span>Invested Amount:</span> <strong id="sipInvested">₹6,00,000</strong></div>
+                                <div class="emi-metric"><span>Est. Returns:</span> <strong id="sipReturns" style="color:#10b981;">₹5,61,695</strong></div>
+                                <div class="emi-metric"><span>Total Maturity Value:</span> <strong id="sipMaturity" style="color:#818cf8; font-size:1.2rem;">₹11,61,695</strong></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="comparison-verdict" id="comparisonVerdict">
-                        <i class="fa-solid fa-trophy"></i> <span id="verdictText">Calculating recommendation...</span>
+                    <!-- Lumpsum Panel -->
+                    <div id="panelLumpsum" style="display: none;" class="margin-top">
+                        <div class="grid-2col">
+                            <div>
+                                <div class="form-group">
+                                    <label>One-Time Lumpsum Investment (₹)</label>
+                                    <input type="number" id="lumpAmount" value="100000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Expected Return Rate (% p.a.)</label>
+                                    <input type="number" id="lumpRate" step="0.1" value="12">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time Period (Years)</label>
+                                    <input type="number" id="lumpYears" value="10">
+                                </div>
+                            </div>
+                            <div class="emi-result-box" style="justify-content: center;">
+                                <div class="emi-metric"><span>Initial Investment:</span> <strong id="lumpInvested">₹1,00,000</strong></div>
+                                <div class="emi-metric"><span>Est. Returns:</span> <strong id="lumpReturns" style="color:#10b981;">₹2,10,585</strong></div>
+                                <div class="emi-metric"><span>Total Maturity Value:</span> <strong id="lumpMaturity" style="color:#818cf8; font-size:1.2rem;">₹3,10,585</strong></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 6: FINANCIAL LITERACY PLATFORM                    -->
+            <!-- MODULE 7: FINANCIAL LITERACY PLATFORM                    -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-literacy">
                 <div class="glass-card margin-bottom">
@@ -535,6 +698,118 @@
             </section>
 
         </main>
+
+        <!-- ======================================================= -->
+        <!-- FLOATING AI FINANCIAL CHATBOT WIDGET                    -->
+        <!-- ======================================================= -->
+        <button type="button" class="ai-chat-trigger" id="aiChatTriggerBtn" title="FinHub AI Assistant">
+            <i class="fa-solid fa-robot"></i> <span>Ask AI</span>
+        </button>
+
+        <div class="ai-chat-widget glass-card" id="aiChatWidget" style="display: none;">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fa-solid fa-robot text-indigo"></i>
+                    <div>
+                        <h4>FinHub AI Financial Assistant</h4>
+                        <span class="online-tag">🟢 Online (Hindi & English)</span>
+                    </div>
+                </div>
+                <button type="button" class="chat-close" id="closeAiChatBtn">&times;</button>
+            </div>
+            
+            <div class="chat-body" id="chatBody">
+                <div class="chat-msg bot">
+                    Hello! I am your FinHub AI Assistant. Ask me anything about loans, student budget, savings goals, SIP investments, or credit scores in English or Hindi!
+                </div>
+            </div>
+
+            <div class="chat-chips">
+                <span onclick="sendQuickPrompt('How to get student loan?')">🎓 Student Loan?</span>
+                <span onclick="sendQuickPrompt('Paisa kaise bachaye?')">💰 Paisa bachaye?</span>
+                <span onclick="sendQuickPrompt('What is SIP?')">📈 What is SIP?</span>
+            </div>
+
+            <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="Ask AI a question...">
+                <button type="button" id="sendChatBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- DIGITAL LOAN APPLICATION MODAL (WITH AADHAAR & PAN PHOTO)-->
+        <!-- ======================================================= -->
+        <div class="modal-overlay" id="loanAppModal">
+            <div class="modal-content glass-card max-width-card">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fa-solid fa-file-invoice-dollar glow-icon"></i>
+                        <h3>Apply for Student / Personal Loan</h3>
+                    </div>
+                    <button type="button" class="modal-close" id="closeLoanModalBtn">&times;</button>
+                </div>
+                <p class="modal-subtitle">Fill basic documents & details to submit your instant loan request.</p>
+
+                <form id="loanAppForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-user"></i> Applicant Full Name *</label>
+                            <input type="text" id="loanApplicantName" required placeholder="Shekhar Kumar">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-user-tie"></i> Father's Name *</label>
+                            <input type="text" id="loanFatherName" required placeholder="Rajesh Kumar">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-user-shield"></i> Nominee Name *</label>
+                            <input type="text" id="loanNomineeName" required placeholder="Ramesh Kumar">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-people-arrows"></i> Nominee Relation *</label>
+                            <input type="text" id="loanNomineeRelation" required placeholder="Father / Mother / Brother">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-id-card"></i> Aadhaar Card Number *</label>
+                            <input type="text" id="loanAadhaar" required placeholder="1234 5678 9012">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-address-card"></i> PAN Card Number *</label>
+                            <input type="text" id="loanPan" required placeholder="ABCDE1234F">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-indian-rupee-sign"></i> Requested Loan Amount (₹) *</label>
+                            <input type="number" id="loanAmount" required placeholder="50000" min="1000">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-bullseye"></i> Loan Purpose</label>
+                            <input type="text" id="loanPurpose" placeholder="Higher Education, Tuition Fee, Laptop">
+                        </div>
+                    </div>
+
+                    <!-- Photo Upload Dropzone -->
+                    <div class="doc-upload-grid margin-top margin-bottom">
+                        <div class="upload-box">
+                            <label><i class="fa-solid fa-camera"></i> Aadhaar Photo</label>
+                            <input type="file" id="aadhaarFile" accept="image/*">
+                        </div>
+                        <div class="upload-box">
+                            <label><i class="fa-solid fa-camera"></i> PAN Photo</label>
+                            <input type="file" id="panFile" accept="image/*">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Loan Application
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <!-- AUTH & ADMIN MODALS -->
         <div class="modal-overlay" id="adminAuthModal">

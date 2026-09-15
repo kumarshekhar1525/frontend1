@@ -64,12 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
     setupNavigation();
     setupAuthSystem();
     setupEmiCalculator();
+    setupCalculators();
     setupStudentPlanner();
     setupSavingsGoalsForm();
     setupMonefyTracker();
+    setupUdharTracker();
+    setupAiChatbot();
+    setupLoanApplication();
     loadScholarships();
     loadExpenses();
     loadSavingsGoals();
+    loadUdharTracker();
     loadQuizQuestion();
     checkExistingUserSession();
 });
@@ -370,13 +375,31 @@ function renderAdminDbList(list) {
 // 5. MONEFY PRIVATE DAILY EXPENSE TRACKER & CALCULATOR
 // =========================================================
 function setupMonefyTracker() {
+    const categorySelect = document.getElementById('dailyCategory');
+    const customWrapper = document.getElementById('customOtherWrapper');
+
+    if (categorySelect && customWrapper) {
+        categorySelect.addEventListener('change', () => {
+            if (categorySelect.value === 'Other') {
+                customWrapper.style.display = 'block';
+            } else {
+                customWrapper.style.display = 'none';
+            }
+        });
+    }
+
     const form = document.getElementById('monefyForm');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const title = document.getElementById('dailyTitle').value.trim();
+        let title = document.getElementById('dailyTitle').value.trim();
         const amount = parseFloat(document.getElementById('dailyAmount').value);
         const category = document.getElementById('dailyCategory').value;
+        const customNote = document.getElementById('customOtherNote') ? document.getElementById('customOtherNote').value.trim() : '';
         const date = document.getElementById('dailyDate').value || new Date().toISOString().slice(0, 10);
+
+        if (category === 'Other' && customNote) {
+            title = `${title} (${customNote})`;
+        }
 
         if (!title || !amount) return;
 
@@ -393,6 +416,7 @@ function setupMonefyTracker() {
         saveMonefyToStorage();
         renderMonefyExpenses();
         form.reset();
+        if (customWrapper) customWrapper.style.display = 'none';
         triggerConfetti();
         showToast('🍲 Daily expense logged in private tracker!', 'success');
     });
@@ -551,32 +575,53 @@ async function loadSavingsGoals() {
 
 function renderSavingsGoals() {
     const container = document.getElementById('savingsCardsContainer');
+    const purposeBody = document.getElementById('savingsPurposeTableBody');
+
     if (!savingsGoalsList || savingsGoalsList.length === 0) {
-        container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:2rem;">No savings goals created yet. Use the form on the left to set your first goal!</div>';
+        if (container) container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:2rem;">No savings goals created yet. Use the form on the left to set your first goal!</div>';
+        if (purposeBody) purposeBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active savings purposes recorded yet.</td></tr>';
         return;
     }
 
-    container.innerHTML = savingsGoalsList.map(g => {
-        const curr = parseFloat(g.current_amount) || 0;
-        const target = parseFloat(g.target_amount) || 1;
-        const percent = Math.min(100, Math.round((curr / target) * 100));
+    if (purposeBody) {
+        purposeBody.innerHTML = savingsGoalsList.map(g => {
+            const curr = parseFloat(g.current_amount) || 0;
+            const target = parseFloat(g.target_amount) || 1;
+            const percent = Math.min(100, Math.round((curr / target) * 100));
+            return `
+                <tr>
+                    <td><strong>${escapeHtml(g.goal_name)}</strong></td>
+                    <td><span class="sch-badge" style="background:rgba(16,185,129,0.15); color:#10b981;">Target Purpose</span></td>
+                    <td>₹${target.toLocaleString()}</td>
+                    <td style="color:#10b981; font-weight:700;">₹${curr.toLocaleString()} (${percent}%)</td>
+                </tr>
+            `;
+        }).join('');
+    }
 
-        return `
-            <div class="goal-card">
-                <div class="goal-header">
-                    <span class="goal-title"><i class="fa-solid fa-bullseye text-indigo"></i> ${escapeHtml(g.goal_name)}</span>
-                    <span>₹${curr.toLocaleString()} / <strong>₹${target.toLocaleString()}</strong> (${percent}%)</span>
+    if (container) {
+        container.innerHTML = savingsGoalsList.map(g => {
+            const curr = parseFloat(g.current_amount) || 0;
+            const target = parseFloat(g.target_amount) || 1;
+            const percent = Math.min(100, Math.round((curr / target) * 100));
+
+            return `
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title"><i class="fa-solid fa-bullseye text-indigo"></i> ${escapeHtml(g.goal_name)}</span>
+                        <span>₹${curr.toLocaleString()} / <strong>₹${target.toLocaleString()}</strong> (${percent}%)</span>
+                    </div>
+                    <div class="progress-track" style="height:10px;">
+                        <div class="progress-fill" style="width:${percent}%; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
+                    </div>
+                    <div class="deposit-row">
+                        <input type="number" id="dep-${g.id}" placeholder="Add deposit amount (₹)" min="1">
+                        <button class="btn-deposit" onclick="depositGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Deposit</button>
+                    </div>
                 </div>
-                <div class="progress-track" style="height:10px;">
-                    <div class="progress-fill" style="width:${percent}%; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
-                </div>
-                <div class="deposit-row">
-                    <input type="number" id="dep-${g.id}" placeholder="Add deposit amount (₹)" min="1">
-                    <button class="btn-deposit" onclick="depositGoal('${g.id}')"><i class="fa-solid fa-plus"></i> Deposit</button>
-                </div>
-            </div>
-        `;
-    }).join('');
+            `;
+        }).join('');
+    }
 }
 
 async function depositGoal(id) {
@@ -819,6 +864,361 @@ function setupEmiCalculator() {
 
     [loanAAmount, loanARate, loanATenure, loanBAmount, loanBRate, loanBTenure].forEach(el => el.addEventListener('input', updateComparison));
     updateComparison();
+}
+
+// =========================================================
+// 9. MULTI-CALCULATOR (SIP & LUMPSUM MUTUAL FUNDS)
+// =========================================================
+function setupCalculators() {
+    const tabEmi = document.getElementById('calcTabEmi');
+    const tabSip = document.getElementById('calcTabSip');
+    const tabLump = document.getElementById('calcTabLumpsum');
+
+    const panelEmi = document.getElementById('panelEmi');
+    const panelSip = document.getElementById('panelSip');
+    const panelLump = document.getElementById('panelLumpsum');
+
+    if (tabEmi && tabSip && tabLump) {
+        tabEmi.addEventListener('click', () => {
+            tabEmi.classList.add('active'); tabSip.classList.remove('active'); tabLump.classList.remove('active');
+            panelEmi.style.display = 'block'; panelSip.style.display = 'none'; panelLump.style.display = 'none';
+        });
+        tabSip.addEventListener('click', () => {
+            tabSip.classList.add('active'); tabEmi.classList.remove('active'); tabLump.classList.remove('active');
+            panelSip.style.display = 'block'; panelEmi.style.display = 'none'; panelLump.style.display = 'none';
+            updateSipCalc();
+        });
+        tabLump.addEventListener('click', () => {
+            tabLump.classList.add('active'); tabEmi.classList.remove('active'); tabSip.classList.remove('active');
+            panelLump.style.display = 'block'; panelEmi.style.display = 'none'; panelSip.style.display = 'none';
+            updateLumpsumCalc();
+        });
+    }
+
+    ['sipMonthly', 'sipRate', 'sipYears'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateSipCalc);
+    });
+
+    ['lumpAmount', 'lumpRate', 'lumpYears'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateLumpsumCalc);
+    });
+
+    updateSipCalc();
+    updateLumpsumCalc();
+}
+
+function updateSipCalc() {
+    const monthly = parseFloat(document.getElementById('sipMonthly')?.value) || 0;
+    const rateAnnual = parseFloat(document.getElementById('sipRate')?.value) || 0;
+    const years = parseFloat(document.getElementById('sipYears')?.value) || 0;
+
+    const totalMonths = years * 12;
+    const i = (rateAnnual / 12) / 100;
+
+    let invested = monthly * totalMonths;
+    let maturity = 0;
+
+    if (i > 0 && totalMonths > 0) {
+        maturity = monthly * ((Math.pow(1 + i, totalMonths) - 1) / i) * (1 + i);
+    } else {
+        maturity = invested;
+    }
+
+    const returns = Math.max(0, maturity - invested);
+
+    if (document.getElementById('sipInvested')) document.getElementById('sipInvested').innerText = `₹${Math.round(invested).toLocaleString()}`;
+    if (document.getElementById('sipReturns')) document.getElementById('sipReturns').innerText = `₹${Math.round(returns).toLocaleString()}`;
+    if (document.getElementById('sipMaturity')) document.getElementById('sipMaturity').innerText = `₹${Math.round(maturity).toLocaleString()}`;
+}
+
+function updateLumpsumCalc() {
+    const principal = parseFloat(document.getElementById('lumpAmount')?.value) || 0;
+    const rateAnnual = parseFloat(document.getElementById('lumpRate')?.value) || 0;
+    const years = parseFloat(document.getElementById('lumpYears')?.value) || 0;
+
+    const r = rateAnnual / 100;
+    const maturity = principal * Math.pow(1 + r, years);
+    const returns = Math.max(0, maturity - principal);
+
+    if (document.getElementById('lumpInvested')) document.getElementById('lumpInvested').innerText = `₹${Math.round(principal).toLocaleString()}`;
+    if (document.getElementById('lumpReturns')) document.getElementById('lumpReturns').innerText = `₹${Math.round(returns).toLocaleString()}`;
+    if (document.getElementById('lumpMaturity')) document.getElementById('lumpMaturity').innerText = `₹${Math.round(maturity).toLocaleString()}`;
+}
+
+// =========================================================
+// 10. UDHAR & MONEY RECEIVED TRACKER ENGINE
+// =========================================================
+let udharGivenList = [];
+let udharTakenList = [];
+
+function setupUdharTracker() {
+    const form = document.getElementById('udharForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const person_name = document.getElementById('udharPerson').value.trim();
+        const amount = parseFloat(document.getElementById('udharAmount').value);
+        const type = document.getElementById('udharType').value;
+        const date = document.getElementById('udharDate').value || new Date().toISOString().slice(0, 10);
+
+        if (!person_name || isNaN(amount) || amount <= 0) return;
+
+        const record = {
+            id: 'u-' + Date.now(),
+            person_name,
+            amount,
+            type,
+            date,
+            user_email: currentUser ? currentUser.email : 'guest'
+        };
+
+        try {
+            await fetch(`${API_BASE_URL}/debts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+        } catch (err) {}
+
+        if (type === 'udhar_given') {
+            udharGivenList.unshift(record);
+        } else {
+            udharTakenList.unshift(record);
+        }
+
+        saveUdharToStorage();
+        renderUdharTables();
+        form.reset();
+        triggerConfetti();
+        showToast('🤝 Udhar record logged successfully!', 'success');
+    });
+}
+
+function loadUdharTracker() {
+    const keyGiven = currentUser ? `finhub_udhar_given_${currentUser.email}` : 'finhub_udhar_given_guest';
+    const keyTaken = currentUser ? `finhub_udhar_taken_${currentUser.email}` : 'finhub_udhar_taken_guest';
+
+    try { udharGivenList = JSON.parse(localStorage.getItem(keyGiven)) || []; } catch (e) { udharGivenList = []; }
+    try { udharTakenList = JSON.parse(localStorage.getItem(keyTaken)) || []; } catch (e) { udharTakenList = []; }
+
+    renderUdharTables();
+}
+
+function saveUdharToStorage() {
+    const keyGiven = currentUser ? `finhub_udhar_given_${currentUser.email}` : 'finhub_udhar_given_guest';
+    const keyTaken = currentUser ? `finhub_udhar_taken_${currentUser.email}` : 'finhub_udhar_taken_guest';
+
+    localStorage.setItem(keyGiven, JSON.stringify(udharGivenList));
+    localStorage.setItem(keyTaken, JSON.stringify(udharTakenList));
+}
+
+function renderUdharTables() {
+    const givenBody = document.getElementById('udharGivenTableBody');
+    const takenBody = document.getElementById('udharTakenTableBody');
+
+    let totalGiven = 0;
+    let totalTaken = 0;
+
+    if (givenBody) {
+        givenBody.innerHTML = udharGivenList.map(u => {
+            const amt = parseFloat(u.amount) || 0;
+            totalGiven += amt;
+            return `
+                <tr>
+                    <td><strong>${escapeHtml(u.person_name)}</strong></td>
+                    <td>${u.date}</td>
+                    <td style="color:#ef4444; font-weight:700;">₹${amt.toLocaleString()}</td>
+                    <td><button onclick="deleteUdharEntry('${u.id}', 'given')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+            `;
+        }).join('') || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No money lent (Udhar Diya) recorded yet.</td></tr>';
+    }
+
+    if (takenBody) {
+        takenBody.innerHTML = udharTakenList.map(u => {
+            const amt = parseFloat(u.amount) || 0;
+            totalTaken += amt;
+            const badgeLabel = u.type === 'money_received' ? 'Money Received' : 'Udhar Liya';
+            const colorClass = u.type === 'money_received' ? '#10b981' : '#f59e0b';
+            return `
+                <tr>
+                    <td><strong>${escapeHtml(u.person_name)}</strong></td>
+                    <td><span class="sch-badge" style="background:rgba(245,158,11,0.15); color:${colorClass};">${badgeLabel}</span></td>
+                    <td>${u.date}</td>
+                    <td style="color:${colorClass}; font-weight:700;">₹${amt.toLocaleString()}</td>
+                    <td><button onclick="deleteUdharEntry('${u.id}', 'taken')" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>
+            `;
+        }).join('') || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No money borrowed/received recorded yet.</td></tr>';
+    }
+
+    const givenValEl = document.getElementById('totalUdharGivenVal');
+    const takenValEl = document.getElementById('totalUdharTakenVal');
+    if (givenValEl) givenValEl.innerText = `₹${totalGiven.toLocaleString()}`;
+    if (takenValEl) takenValEl.innerText = `₹${totalTaken.toLocaleString()}`;
+}
+
+function deleteUdharEntry(id, category) {
+    if (category === 'given') {
+        udharGivenList = udharGivenList.filter(x => x.id !== id);
+    } else {
+        udharTakenList = udharTakenList.filter(x => x.id !== id);
+    }
+    saveUdharToStorage();
+    renderUdharTables();
+    showToast('Record deleted.', 'info');
+}
+
+// =========================================================
+// 11. AI FINANCIAL ASSISTANT CHATBOT
+// =========================================================
+function setupAiChatbot() {
+    const triggerBtn = document.getElementById('aiChatTriggerBtn');
+    const widget = document.getElementById('aiChatWidget');
+    const closeBtn = document.getElementById('closeAiChatBtn');
+    const sendBtn = document.getElementById('sendChatBtn');
+    const chatInput = document.getElementById('chatInput');
+
+    if (!triggerBtn || !widget) return;
+
+    triggerBtn.addEventListener('click', () => {
+        const isVisible = widget.style.display === 'flex' || widget.style.display === 'block';
+        widget.style.display = isVisible ? 'none' : 'flex';
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', () => widget.style.display = 'none');
+
+    if (sendBtn && chatInput) {
+        sendBtn.addEventListener('click', handleChatSubmit);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleChatSubmit();
+        });
+    }
+}
+
+function sendQuickPrompt(promptText) {
+    const chatInput = document.getElementById('chatInput');
+    const widget = document.getElementById('aiChatWidget');
+    if (widget) widget.style.display = 'flex';
+    if (chatInput) {
+        chatInput.value = promptText;
+        handleChatSubmit();
+    }
+}
+window.sendQuickPrompt = sendQuickPrompt;
+
+function handleChatSubmit() {
+    const chatInput = document.getElementById('chatInput');
+    const chatBody = document.getElementById('chatBody');
+    if (!chatInput || !chatBody) return;
+
+    const userMsg = chatInput.value.trim();
+    if (!userMsg) return;
+
+    const userDiv = document.createElement('div');
+    userDiv.className = 'chat-msg user';
+    userDiv.innerText = userMsg;
+    chatBody.appendChild(userDiv);
+
+    chatInput.value = '';
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    setTimeout(() => {
+        const botReply = generateAiResponse(userMsg);
+        const botDiv = document.createElement('div');
+        botDiv.className = 'chat-msg bot';
+        botDiv.innerHTML = botReply;
+        chatBody.appendChild(botDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }, 600);
+}
+
+function generateAiResponse(msg) {
+    const query = msg.toLowerCase();
+
+    if (query.includes('loan') || query.includes('credit') || query.includes('उधार') || query.includes('ऋण')) {
+        return `💡 <strong>FinHub Loan Advice:</strong><br>To apply for a loan, click on <strong>'Apply Loan'</strong> at the top navbar. Required documents are Aadhaar Card, PAN Card, Father Name, Nominee details, and photo uploads. Compare interest rates in our EMI Calculator tab first!`;
+    }
+    if (query.includes('paisa') || query.includes('bachaye') || query.includes('save') || query.includes('saving') || query.includes('बचत')) {
+        return `🎯 <strong>Smart Savings Tip:</strong><br>Follow the <strong>50/30/20 Rule</strong>! Allocate 50% for Needs, 30% for Wants, and 20% directly into your Savings Goals or SIPs. Use our Monefy Private Expense Tracker daily to eliminate unnecessary spending!`;
+    }
+    if (query.includes('sip') || query.includes('invest') || query.includes('mutual fund') || query.includes('निवेश')) {
+        return `📈 <strong>SIP Power:</strong><br>Starting a Systematic Investment Plan (SIP) of just ₹1,000/month at 12% returns can grow to over ₹10 Lakhs in 20 years! Try our <strong>SIP Calculator</strong> tab to model your wealth!`;
+    }
+    if (query.includes('scholarship') || query.includes('छात्रवृत्ति')) {
+        return `🎓 <strong>Scholarship Finder:</strong><br>Explore active scholarships in the <strong>Scholarships</strong> tab (e.g. NSP, PMSS, Post-Matric). You can apply directly with one click!`;
+    }
+
+    return `🤖 Thank you for your question! FinHub helps you manage expenses, set savings goals, compare EMI loans, calculate SIP wealth, and track Udhar (Lent/Borrowed money). How can I assist you further?`;
+}
+
+// =========================================================
+// 12. DIGITAL LOAN APPLICATION MODAL & PHOTO UPLOAD
+// =========================================================
+function setupLoanApplication() {
+    const openBtns = document.querySelectorAll('#openLoanModalBtn, .btn-loan-cta, .open-loan-modal');
+    const modal = document.getElementById('loanAppModal');
+    const closeBtn = document.getElementById('closeLoanModalBtn');
+    const form = document.getElementById('loanAppForm');
+
+    openBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (!currentUser) {
+                showToast('Please Sign In before applying for a loan.', 'warning');
+                openUserAuthModal('signin');
+                return;
+            }
+            if (modal) modal.classList.add('active');
+        });
+    });
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    }
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const applicant_name = document.getElementById('loanApplicantName').value.trim();
+            const father_name = document.getElementById('loanFatherName').value.trim();
+            const nominee_name = document.getElementById('loanNomineeName').value.trim();
+            const nominee_relation = document.getElementById('loanNomineeRelation').value.trim();
+            const aadhaar = document.getElementById('loanAadhaar').value.trim();
+            const pan = document.getElementById('loanPan').value.trim();
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const purpose = document.getElementById('loanPurpose').value.trim() || 'General Purpose Loan';
+
+            const payload = {
+                user_email: currentUser ? currentUser.email : 'guest',
+                applicant_name,
+                father_name,
+                nominee_name,
+                nominee_relation,
+                aadhaar_number: aadhaar,
+                pan_number: pan,
+                loan_amount: amount,
+                loan_purpose: purpose,
+                status: 'Submitted / Under Verification',
+                created_at: new Date().toISOString()
+            };
+
+            try {
+                await fetch(`${API_BASE_URL}/loans/apply`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {}
+
+            if (modal) modal.classList.remove('active');
+            form.reset();
+            triggerConfetti();
+            showToast(`📝 Loan application for ₹${amount.toLocaleString()} submitted successfully! Status: Under Verification.`, 'success');
+        });
+    }
 }
 
 function loadQuizQuestion() {
