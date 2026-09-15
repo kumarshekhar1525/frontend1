@@ -1,100 +1,97 @@
-# User Registration System (Supabase + Node.js Express + Glassmorphism Frontend)
+# 🪙 FinHub — Fullstack Financial Literacy & Management Platform
 
-A fullstack user registration web application built with a modern frontend, Node.js Express backend, and Supabase database integration.
-
----
-
-## 📌 Project Overview
-
-- **Supabase Project ID**: `yzkkjnukyjwirjamygsm`
-- **Supabase URL**: `https://yzkkjnukyjwirjamygsm.supabase.co`
-- **Architecture**:
-  - **Frontend (`frontend/`)**: Modern responsive web form featuring glassmorphism UI, Father's Name field, password strength indicator, real-time validation, and registered users modal view.
-  - **Backend (`backend/`)**: Express REST API server connected to Supabase using `@supabase/supabase-js`. Handles data validation, duplicate email detection, and record insertion into the database.
-  - **Supabase Database (`supabase/schema.sql`)**: PostgreSQL schema definition and Row Level Security (RLS) policies.
+**FinHub** is an all-in-one web-based financial solution designed to help individuals and students manage, understand, and optimize their finances effectively. Built with modern glassmorphism aesthetics, Express backend, Supabase PostgreSQL database, and bilingual support (English & Hindi).
 
 ---
 
-## 🚀 Quick Setup Guide
+## ✨ Features Included
 
-### Step 1: Run SQL Schema in Supabase
+1. 📊 **Personal Expense & Budget Manager**:
+   - Track Income vs Expenses with live net savings balance.
+   - Category breakdown (Food, Rent, Transit, Education, Fun, Health).
+   - Monthly budget cap progress indicators & history table.
 
-1. Go to your [Supabase Dashboard](https://supabase.com/dashboard/project/yzkkjnukyjwirjamygsm).
-2. Click **SQL Editor** in the left sidebar.
-3. Open [`supabase/schema.sql`](supabase/schema.sql) in your code editor or copy its contents:
+2. 🎓 **Student Finance & Scholarship Finder**:
+   - Semester tuition & living allowance budget planner.
+   - Searchable & filterable active scholarship directory (Merit, Need-based, STEM) with direct apply links.
 
-```sql
--- 1. Create registrations table
-CREATE TABLE IF NOT EXISTS public.registrations (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    full_name TEXT NOT NULL,
-    father_name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    phone TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+3. 🎯 **Savings Goal Planner**:
+   - Set custom target goals (e.g. Emergency Fund, Laptop, Higher Education).
+   - Target completion date, deposit tracker, and visual progress percentage rings.
 
--- 2. Enable Row Level Security (RLS)
-ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;
+4. 🧮 **EMI & Loan Calculator with Side-by-Side Comparison**:
+   - Exact monthly EMI formula calculation: `P × r × (1+r)^n / ((1+r)^n - 1)`.
+   - Side-by-side comparison of 2 loan offers (Interest Rate, Term, Total Interest, Total Payment).
 
--- 3. Policy: Allow public insertion
-CREATE POLICY "Allow public insert on registrations" 
-ON public.registrations FOR INSERT TO anon, authenticated WITH CHECK (true);
+5. 🔁 **Subscription Tracker**:
+   - Track monthly and yearly subscriptions (Netflix, Spotify, Cloud, Software).
+   - Monthly burn calculator & upcoming renewal alert badges.
 
--- 4. Policy: Allow public reading
-CREATE POLICY "Allow public read on registrations" 
-ON public.registrations FOR SELECT TO anon, authenticated USING (true);
+6. 📚 **Financial Literacy Platform & Quiz**:
+   - Bite-sized learning guides on 50/30/20 Rule, Mutual Funds, Credit Score, and Taxes.
+   - Interactive Financial Knowledge Quiz with real-time scoring.
 
--- 5. Index
-CREATE INDEX IF NOT EXISTS idx_registrations_email ON public.registrations(email);
-```
-
-4. Paste into the SQL Editor and click **RUN**.
+7. 🌐 **Bilingual UI Support (Hindi / English)**:
+   - One-click language switcher (`English` ↔ `हिंदी`) for maximum accessibility.
 
 ---
 
-### Step 2: Start the Backend Server
+## 🗄️ Supabase Database Setup
+
+1. Log into your [Supabase Dashboard](https://supabase.com/dashboard).
+2. Go to **SQL Editor**.
+3. Copy and execute the SQL contents from [`supabase/schema.sql`](supabase/schema.sql) to create `registrations`, `expenses`, `savings_goals`, `subscriptions`, and `scholarships` tables.
+
+---
+
+## 🐙 Pushing Code to GitHub
 
 ```bash
-cd backend
-npm install
-npm start
-```
+# Initialize git (if not already done)
+git init
 
-The backend server will launch at `http://localhost:5000`. You can check server health at `http://localhost:5000/api/health`.
+# Add all files
+git add .
 
-To test table readiness at any time, run:
-```bash
-npm run init-db
-```
+# Commit changes
+git commit -m "Feat: FinHub financial platform with Supabase, Vercel config, and bilingual support"
 
----
-
-### Step 3: Launch the Frontend
-
-Open [`frontend/index.html`](frontend/index.html) in your browser (or use VS Code Live Server / standard HTTP server).
-
----
-
-## 🐙 Pushing to GitHub
-
-This repository has been initialized with Git. Follow these commands to push your project to GitHub:
-
-1. Create a new repository on [GitHub](https://github.com/new) (e.g., `user-registration-supabase`).
-2. Run the following terminal commands inside this project directory (`frontend1`):
-
-```bash
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME.git
+# Link to your remote GitHub repository
+git remote add origin https://github.com/YOUR_USERNAME/finhub-financial-platform.git
 git branch -M main
 git push -u origin main
 ```
 
 ---
 
-## 📡 API Endpoints Summary
+## 🚀 Deploying to Vercel
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Check API & Supabase connectivity |
-| `POST` | `/api/register` | Register new user into `registrations` table |
-| `GET` | `/api/registrations` | Fetch all registered records |
+This project includes a ready-to-use [`vercel.json`](vercel.json) configuration.
+
+### Option 1: Via Vercel CLI
+```bash
+npm install -g vercel
+vercel
+```
+
+### Option 2: Via Vercel Web Dashboard
+1. Go to [vercel.com/new](https://vercel.com/new).
+2. Import your GitHub repository (`finhub-financial-platform`).
+3. Set Environment Variables:
+   - `SUPABASE_URL`: `https://yzkkjnukyjwirjamygsm.supabase.co`
+   - `SUPABASE_ANON_KEY`: `your_supabase_anon_key`
+4. Click **Deploy**. Vercel will automatically host the Express serverless backend and static glassmorphism frontend!
+
+---
+
+## 💻 Running Locally
+
+```bash
+# Install backend dependencies
+cd backend
+npm install
+
+# Start local server (Default Port 5001)
+npm start
+```
+Open `http://localhost:5001/` in your browser.

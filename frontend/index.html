@@ -1,172 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration System | Supabase Powered</title>
+    <title>FinHub — Smart Financial Literacy, Expense & Loan Management Platform</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Ambient Glowing Orbs -->
+    <!-- Interactive Background Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Ambient Glowing Orbs -->
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
 
-    <!-- Main Container -->
     <div class="app-container">
         
-        <!-- Header / Navigation Bar -->
+        <!-- Header Bar -->
         <header class="app-header">
             <div class="logo-area">
                 <div class="logo-icon">
-                    <i class="fa-solid fa-user-plus"></i>
+                    <i class="fa-solid fa-coins"></i>
                 </div>
                 <div class="logo-text">
-                    <span class="brand-title">RegisHub</span>
-                    <span class="brand-sub">Supabase + Express</span>
+                    <div class="brand-row">
+                        <span class="brand-title">FinHub</span>
+                        <span class="brand-tag">v2.5</span>
+                    </div>
+                    <span class="brand-sub" data-i18n="subTitle">Smart Financial Services & Literacy Hub</span>
                 </div>
             </div>
 
             <div class="header-actions">
+                <!-- System Status -->
                 <div class="system-badge" id="systemBadge">
                     <span class="status-dot pulsing"></span>
-                    <span id="systemStatusText">Checking API...</span>
+                    <span id="systemStatusText">API Online</span>
+                    <span class="ping-badge" id="pingBadge">-- ms</span>
                 </div>
+
+                <!-- Language Switcher -->
+                <button type="button" class="btn-icon lang-btn" id="langToggleBtn" title="Switch Language (English / हिंदी)">
+                    <i class="fa-solid fa-language"></i> <span id="langLabel">HI</span>
+                </button>
+
+                <!-- Theme Switcher -->
+                <button type="button" class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <!-- Database Modal Trigger -->
                 <button type="button" class="btn-secondary" id="viewUsersBtn">
-                    <i class="fa-solid fa-users"></i> View Registered (<span id="userCount">0</span>)
+                    <i class="fa-solid fa-database"></i> <span data-i18n="usersBtn">Database Records</span>
                 </button>
             </div>
         </header>
 
-        <!-- Form Hero Section -->
-        <main class="form-wrapper">
-            <div class="card glass-card">
-                <div class="card-header">
-                    <h2>Create Account</h2>
-                    <p>Enter your details below to register into the system database.</p>
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs-wrapper">
+            <div class="nav-tabs" id="navTabs">
+                <button type="button" class="tab-btn active" data-tab="tab-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i> <span data-i18n="tabDashboard">Expenses & Budget</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-scholarships">
+                    <i class="fa-solid fa-graduation-cap"></i> <span data-i18n="tabStudent">Student & Scholarships</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-savings">
+                    <i class="fa-solid fa-piggy-bank"></i> <span data-i18n="tabSavings">Savings Goals</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-emi">
+                    <i class="fa-solid fa-calculator"></i> <span data-i18n="tabEmi">EMI Loan Compare</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-subscriptions">
+                    <i class="fa-solid fa-repeat"></i> <span data-i18n="tabSubs">Subscriptions</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-literacy">
+                    <i class="fa-solid fa-book-open-reader"></i> <span data-i18n="tabLiteracy">Financial Literacy</span>
+                </button>
+                <button type="button" class="tab-btn" data-tab="tab-register">
+                    <i class="fa-solid fa-id-card"></i> <span data-i18n="tabRegister">Registration</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Modules -->
+        <main class="content-area">
+
+            <!-- ======================================================= -->
+            <!-- MODULE 1: EXPENSE & BUDGET MANAGER                      -->
+            <!-- ======================================================= -->
+            <section class="tab-panel active" id="tab-dashboard">
+                
+                <!-- Financial Metrics Summary -->
+                <div class="metrics-grid">
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon income"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label" data-i18n="totalIncome">Total Income</span>
+                            <h3 class="metric-value" id="totalIncomeVal">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon expense"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label" data-i18n="totalExpense">Total Expenses</span>
+                            <h3 class="metric-value" id="totalExpenseVal">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon savings"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label" data-i18n="netSavings">Net Savings</span>
+                            <h3 class="metric-value" id="netSavingsVal">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon budget"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label" data-i18n="monthlyBudget">Monthly Budget</span>
+                            <h3 class="metric-value" id="monthlyBudgetVal">₹30,000</h3>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Registration Form -->
-                <form id="registrationForm" novalidate>
+                <!-- Budget Bar -->
+                <div class="glass-card budget-bar-card">
+                    <div class="budget-bar-header">
+                        <span><i class="fa-solid fa-gauge-high"></i> <span data-i18n="budgetUsage">Monthly Budget Limit Usage</span></span>
+                        <span id="budgetPercentText">0% Used</span>
+                    </div>
+                    <div class="progress-track large">
+                        <div class="progress-fill" id="budgetProgressFill"></div>
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Add Transaction Form -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-circle-plus"></i> <span data-i18n="addTxTitle">Add Transaction</span></h2>
+                            <p data-i18n="addTxSub">Record income or expense entries into database.</p>
+                        </div>
+                        <form id="expenseForm">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-pen"></i> <span data-i18n="lblTitle">Title</span> *</label>
+                                <input type="text" id="txTitle" placeholder="e.g. Salary, Rent, Grocery" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-indian-rupee-sign"></i> <span data-i18n="lblAmount">Amount (₹)</span> *</label>
+                                    <input type="number" id="txAmount" placeholder="1000" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-list"></i> <span data-i18n="lblType">Type</span></label>
+                                    <select id="txType">
+                                        <option value="expense">Expense</option>
+                                        <option value="income">Income</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-tags"></i> <span data-i18n="lblCategory">Category</span></label>
+                                    <select id="txCategory">
+                                        <option value="Food">Food & Dining</option>
+                                        <option value="Rent">Rent & Housing</option>
+                                        <option value="Education">Education & Books</option>
+                                        <option value="Transit">Transport & Fuel</option>
+                                        <option value="Entertainment">Fun & Entertainment</option>
+                                        <option value="Health">Healthcare</option>
+                                        <option value="Salary">Salary / Income</option>
+                                        <option value="General">General</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-calendar"></i> <span data-i18n="lblDate">Date</span></label>
+                                    <input type="date" id="txDate">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddTx">Add Transaction</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Category Breakdown & List -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-receipt"></i> <span data-i18n="recentTxTitle">Recent Transactions</span></h2>
+                            <p data-i18n="recentTxSub">Live sync with Supabase cloud database.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="txTableBody">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 2: STUDENT FINANCE & SCHOLARSHIP FINDER           -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-scholarships">
+                
+                <!-- Student Budget Calculator -->
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-graduation-cap glow-icon"></i> <span data-i18n="studentPlannerTitle">Student Finance & Allowance Planner</span></h2>
+                        <p data-i18n="studentPlannerSub">Calculate semester budgets and recommended monthly spending limits for students.</p>
+                    </div>
                     <div class="form-grid">
-                        
-                        <!-- Full Name Field -->
-                        <div class="input-group">
-                            <label for="fullName">
-                                <i class="fa-solid fa-user"></i> Full Name <span class="required">*</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="text" id="fullName" name="full_name" placeholder="John Doe" required autocomplete="name">
-                                <i class="fa-solid fa-circle-check valid-icon"></i>
-                            </div>
-                            <span class="error-msg" id="fullNameError">Full Name is required</span>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="monthlyAllowance">Monthly Allowance / Stipend (₹)</span></label>
+                            <input type="number" id="stuAllowance" value="12000">
                         </div>
-
-                        <!-- Father's Name Field -->
-                        <div class="input-group">
-                            <label for="fatherName">
-                                <i class="fa-solid fa-user-tie"></i> Father's Name <span class="required">*</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="text" id="fatherName" name="father_name" placeholder="Robert Doe" required>
-                                <i class="fa-solid fa-circle-check valid-icon"></i>
-                            </div>
-                            <span class="error-msg" id="fatherNameError">Father's Name is required</span>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-book"></i> <span data-i18n="tuitionFee">Semester Tuition & Exam Fee (₹)</span></label>
+                            <input type="number" id="stuTuition" value="45000">
                         </div>
+                    </div>
+                    <div class="student-calc-result" id="stuCalcResult">
+                        <div class="calc-badge"><i class="fa-solid fa-lightbulb"></i> Recommended Monthly Cap: <strong>₹8,400</strong></div>
+                        <div class="calc-badge"><i class="fa-solid fa-piggy-bank"></i> Semester Savings Potential: <strong>₹21,600</strong></div>
+                    </div>
+                </div>
 
-                        <!-- Email Address Field -->
-                        <div class="input-group">
-                            <label for="email">
-                                <i class="fa-solid fa-envelope"></i> Email Address <span class="required">*</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email">
-                                <i class="fa-solid fa-circle-check valid-icon"></i>
-                            </div>
-                            <span class="error-msg" id="emailError">Please enter a valid email address</span>
-                        </div>
-
-                        <!-- Phone Number Field -->
-                        <div class="input-group">
-                            <label for="phone">
-                                <i class="fa-solid fa-phone"></i> Phone Number
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" autocomplete="tel">
-                                <i class="fa-solid fa-circle-check valid-icon"></i>
-                            </div>
-                        </div>
-
-                        <!-- Password Field -->
-                        <div class="input-group">
-                            <label for="password">
-                                <i class="fa-solid fa-lock"></i> Password <span class="required">*</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="password" id="password" name="password" placeholder="••••••••" required>
-                                <button type="button" class="toggle-password" id="togglePasswordBtn">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="strength-bar-wrapper">
-                                <div class="strength-bar" id="strengthBar"></div>
-                            </div>
-                            <span class="error-msg" id="passwordError">Password must be at least 6 characters</span>
-                        </div>
-
-                        <!-- Confirm Password Field -->
-                        <div class="input-group">
-                            <label for="confirmPassword">
-                                <i class="fa-solid fa-lock"></i> Confirm Password <span class="required">*</span>
-                            </label>
-                            <div class="input-wrapper">
-                                <input type="password" id="confirmPassword" placeholder="••••••••" required>
-                            </div>
-                            <span class="error-msg" id="confirmPasswordError">Passwords do not match</span>
-                        </div>
-
+                <!-- Scholarship Finder -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-award"></i> <span data-i18n="scholarshipTitle">Active Scholarships & Financial Aid Directory</span></h2>
+                        <p data-i18n="scholarshipSub">Discover government, corporate, and merit scholarships for higher education.</p>
                     </div>
 
-                    <!-- Terms & Conditions Checkbox -->
-                    <div class="checkbox-group">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" id="termsCheck" required>
-                            <span class="checkmark"></span>
-                            <span class="label-text">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
-                        </label>
-                        <span class="error-msg" id="termsError">You must accept the terms to register</span>
+                    <div class="scholarship-filter-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="schSearchInput" placeholder="Search scholarships by title, provider, criteria...">
+                        </div>
+                        <select id="schCategoryFilter" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="Merit-Based">Merit-Based</option>
+                            <option value="Need-Based">Need-Based</option>
+                            <option value="Merit-cum-Means">Merit-cum-Means</option>
+                            <option value="STEM / Diversity">STEM / Diversity</option>
+                        </select>
                     </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn-primary" id="submitBtn">
-                        <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> Submit Registration</span>
-                        <span class="spinner" id="btnSpinner"></span>
-                    </button>
+                    <div class="scholarships-grid" id="scholarshipsGrid">
+                        <!-- Dynamic Scholarship Cards -->
+                    </div>
+                </div>
 
-                </form>
-            </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 3: SAVINGS GOAL PLANNER                           -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-savings">
+                <div class="grid-2col">
+                    <!-- Create Savings Goal Form -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-bullseye glow-icon"></i> <span data-i18n="createGoalTitle">Set New Savings Goal</span></h2>
+                            <p data-i18n="createGoalSub">Track target goals like Emergency Fund, Laptop, or College Tuition.</p>
+                        </div>
+                        <form id="savingsForm">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-star"></i> <span data-i18n="lblGoalName">Goal Name</span> *</label>
+                                <input type="text" id="goalName" placeholder="e.g. New Laptop Fund" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-flag"></i> <span data-i18n="lblTargetAmount">Target Amount (₹)</span> *</label>
+                                    <input type="number" id="goalTarget" placeholder="60000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-wallet"></i> <span data-i18n="lblInitialSaved">Initial Savings (₹)</span></label>
+                                    <input type="number" id="goalInitial" placeholder="10000" value="0">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-calendar-day"></i> <span data-i18n="lblTargetDate">Target Date</span></label>
+                                <input type="date" id="goalDate">
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-plus"></i> <span data-i18n="btnAddGoal">Create Goal</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Savings Goals List Cards -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-vault"></i> <span data-i18n="yourGoalsTitle">Your Active Goals</span></h2>
+                            <p data-i18n="yourGoalsSub">Deposit funds and monitor your visual progress rings.</p>
+                        </div>
+                        <div class="savings-cards-container" id="savingsCardsContainer">
+                            <!-- Dynamic Savings Goal Cards -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 4: EMI & LOAN COMPARISON CALCULATOR              -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-emi">
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-scale-balanced glow-icon"></i> <span data-i18n="emiTitle">Side-by-Side Loan EMI Comparison Calculator</span></h2>
+                        <p data-i18n="emiSub">Compare monthly EMI, total interest, and total payout between 2 bank loan offers.</p>
+                    </div>
+
+                    <div class="loan-comparison-grid">
+                        <!-- Loan Offer A -->
+                        <div class="loan-card loan-a">
+                            <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer A (Bank 1)</div>
+                            <div class="form-group">
+                                <label>Loan Amount (₹)</label>
+                                <input type="number" id="loanAAmount" value="500000">
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Interest Rate (% p.a.)</label>
+                                    <input type="number" id="loanARate" step="0.1" value="8.5">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tenure (Years)</label>
+                                    <input type="number" id="loanATenure" value="5">
+                                </div>
+                            </div>
+                            <div class="emi-result-box">
+                                <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiAVal">₹0</strong></div>
+                                <div class="emi-metric"><span>Total Interest:</span> <strong id="interestAVal">₹0</strong></div>
+                                <div class="emi-metric"><span>Total Payment:</span> <strong id="totalAVal">₹0</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Loan Offer B -->
+                        <div class="loan-card loan-b">
+                            <div class="loan-card-title"><i class="fa-solid fa-building-columns"></i> Loan Offer B (Bank 2)</div>
+                            <div class="form-group">
+                                <label>Loan Amount (₹)</label>
+                                <input type="number" id="loanBAmount" value="500000">
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Interest Rate (% p.a.)</label>
+                                    <input type="number" id="loanBRate" step="0.1" value="9.2">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tenure (Years)</label>
+                                    <input type="number" id="loanBTenure" value="5">
+                                </div>
+                            </div>
+                            <div class="emi-result-box">
+                                <div class="emi-metric"><span>Monthly EMI:</span> <strong id="emiBVal">₹0</strong></div>
+                                <div class="emi-metric"><span>Total Interest:</span> <strong id="interestBVal">₹0</strong></div>
+                                <div class="emi-metric"><span>Total Payment:</span> <strong id="totalBVal">₹0</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Verdict Banner -->
+                    <div class="comparison-verdict" id="comparisonVerdict">
+                        <i class="fa-solid fa-trophy"></i> <span id="verdictText">Calculating comparison recommendation...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 5: SUBSCRIPTION TRACKER                          -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-subscriptions">
+                <div class="grid-2col">
+                    <!-- Add Subscription Form -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-repeat glow-icon"></i> <span data-i18n="addSubTitle">Track New Subscription</span></h2>
+                            <p data-i18n="addSubSub">Monitor monthly SaaS, streaming services, and membership recurring burn.</p>
+                        </div>
+                        <form id="subForm">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-tv"></i> <span data-i18n="lblServiceName">Service Name</span> *</label>
+                                <input type="text" id="subName" placeholder="e.g. Netflix, Spotify, ChatGPT" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-tag"></i> <span data-i18n="lblSubAmount">Amount (₹)</span> *</label>
+                                    <input type="number" id="subAmount" placeholder="499" required>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-clock"></i> Cycle</label>
+                                    <select id="subCycle">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-calendar"></i> Next Renewal Date</label>
+                                <input type="date" id="subDate">
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                <i class="fa-solid fa-plus"></i> Add Subscription
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Subscriptions List & Total Monthly Burn -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-fire-flame-curved"></i> Monthly Recurring Burn: <span id="totalSubBurn">₹0</span></h2>
+                            <p>Active subscriptions automatically tracked.</p>
+                        </div>
+                        <div class="subs-list" id="subsList">
+                            <!-- Dynamic Subscriptions -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 6: FINANCIAL LITERACY & KNOWLEDGE QUIZ           -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-literacy">
+                
+                <!-- Bite-sized Guides -->
+                <div class="glass-card margin-bottom">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-book-open glow-icon"></i> Financial Literacy Guides (वित्तीय साक्षरता)</h2>
+                        <p>Essential money rules every individual and student must know.</p>
+                    </div>
+
+                    <div class="guides-grid">
+                        <div class="guide-card">
+                            <div class="guide-icon"><i class="fa-solid fa-pie-chart"></i></div>
+                            <h4>The 50/30/20 Budgeting Rule</h4>
+                            <p>Allocate 50% of income to Needs (Rent, Food), 30% to Wants (Fun, Shopping), and 20% directly to Savings & Investments.</p>
+                        </div>
+                        <div class="guide-card">
+                            <div class="guide-icon"><i class="fa-solid fa-chart-line"></i></div>
+                            <h4>Power of SIP & Compounding</h4>
+                            <p>Investing just ₹1,000/month in a Systematic Investment Plan (SIP) @ 12% return for 20 years yields over ₹10 Lakhs!</p>
+                        </div>
+                        <div class="guide-card">
+                            <div class="guide-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                            <h4>Credit Score (CIBIL) 101</h4>
+                            <p>Maintain a credit score above 750 by paying credit card bills & EMIs on time to unlock low-interest loans.</p>
+                        </div>
+                        <div class="guide-card">
+                            <div class="guide-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            <h4>Tax Saving Basics (Section 80C)</h4>
+                            <p>Save up to ₹1.5 Lakhs in income tax using ELSS mutual funds, PPF, and National Pension Scheme (NPS).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Knowledge Quiz -->
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-brain glow-icon"></i> Interactive Financial Literacy Quiz</h2>
+                        <p>Test your knowledge and earn your Financial IQ score.</p>
+                    </div>
+
+                    <div id="quizContainer">
+                        <div class="quiz-question-card" id="quizCard">
+                            <h3 id="quizQuestion">Question loading...</h3>
+                            <div class="quiz-options" id="quizOptions">
+                                <!-- Dynamic Options -->
+                            </div>
+                        </div>
+                        <div class="quiz-score-box" id="quizScoreBox" style="display: none;">
+                            <i class="fa-solid fa-trophy score-icon"></i>
+                            <h3>Quiz Completed!</h3>
+                            <p>Your Financial IQ Score: <strong id="quizScoreVal">0/5</strong></p>
+                            <button type="button" class="btn-primary" id="restartQuizBtn">Try Again</button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 7: USER REGISTRATION                            -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-register">
+                <div class="glass-card max-width-card">
+                    <div class="card-header">
+                        <h2>Create Your FinHub Account</h2>
+                        <p>Register your account into the Supabase database to sync all financial entries.</p>
+                    </div>
+                    <form id="registrationForm" novalidate>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-user"></i> Full Name *</label>
+                                <input type="text" id="fullName" required placeholder="John Doe">
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-user-tie"></i> Father's Name *</label>
+                                <input type="text" id="fatherName" required placeholder="Robert Doe">
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-envelope"></i> Email Address *</label>
+                                <input type="email" id="email" required placeholder="john@example.com">
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                                <input type="tel" id="phone" placeholder="+91 98765 43210">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary margin-top">
+                            <i class="fa-solid fa-paper-plane"></i> Register Account
+                        </button>
+                    </form>
+                </div>
+            </section>
+
         </main>
 
-        <!-- Registered Users Modal -->
+        <!-- Registered Users Database Modal -->
         <div class="modal-overlay" id="usersModal">
             <div class="modal-content glass-card">
                 <div class="modal-header">
-                    <h3><i class="fa-solid fa-database"></i> Registered Database Users</h3>
+                    <h3><i class="fa-solid fa-database"></i> Registered Supabase Records</h3>
                     <button type="button" class="modal-close" id="closeModalBtn">&times;</button>
                 </div>
                 <div class="modal-body" id="modalBody">
-                    <div class="loading-state" id="modalLoading">
-                        <div class="spinner"></div>
-                        <p>Fetching records from Supabase...</p>
-                    </div>
-                    <div class="table-responsive" id="usersTableWrapper" style="display: none;">
+                    <div class="table-responsive">
                         <table class="users-table">
                             <thead>
                                 <tr>
@@ -174,7 +557,7 @@
                                     <th>Father's Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Registered Date</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
@@ -182,15 +565,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="empty-state" id="modalEmpty" style="display: none;">
-                        <i class="fa-solid fa-folder-open"></i>
-                        <p>No registered users found in the database yet.</p>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Notification Toast Container -->
+        <!-- Toast Notification Container -->
         <div class="toast-container" id="toastContainer"></div>
 
     </div>

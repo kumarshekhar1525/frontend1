@@ -1,10 +1,9 @@
 -- =======================================================
--- Supabase Schema for Registration System
+-- Supabase Schema for FinHub Financial Management Platform
 -- Project ID: yzkkjnukyjwirjamygsm
--- Table: registrations
 -- =======================================================
 
--- 1. Create registrations table
+-- 1. Registrations Table
 CREATE TABLE IF NOT EXISTS public.registrations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     full_name TEXT NOT NULL,
@@ -14,22 +13,72 @@ CREATE TABLE IF NOT EXISTS public.registrations (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. Enable Row Level Security (RLS)
+-- 2. Expenses Table
+CREATE TABLE IF NOT EXISTS public.expenses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name TEXT DEFAULT 'Guest User',
+    title TEXT NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    type TEXT CHECK (type IN ('income', 'expense')) DEFAULT 'expense',
+    category TEXT NOT NULL,
+    date DATE DEFAULT CURRENT_DATE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Savings Goals Table
+CREATE TABLE IF NOT EXISTS public.savings_goals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name TEXT DEFAULT 'Guest User',
+    goal_name TEXT NOT NULL,
+    target_amount NUMERIC(10, 2) NOT NULL,
+    current_amount NUMERIC(10, 2) DEFAULT 0.00,
+    target_date DATE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Subscriptions Table
+CREATE TABLE IF NOT EXISTS public.subscriptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    full_name TEXT DEFAULT 'Guest User',
+    service_name TEXT NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    billing_cycle TEXT CHECK (billing_cycle IN ('monthly', 'yearly')) DEFAULT 'monthly',
+    next_billing_date DATE,
+    category TEXT DEFAULT 'Entertainment',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. Scholarships Table
+CREATE TABLE IF NOT EXISTS public.scholarships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    provider TEXT NOT NULL,
+    amount TEXT NOT NULL,
+    category TEXT NOT NULL,
+    eligibility TEXT NOT NULL,
+    deadline DATE,
+    link TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- =======================================================
+-- Enable Row Level Security (RLS) & Public Policies
+-- =======================================================
+
 ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.expenses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.savings_goals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.scholarships ENABLE ROW LEVEL SECURITY;
 
--- 3. Policy: Allow anonymous users to insert new registrations
-CREATE POLICY "Allow public insert on registrations" 
-ON public.registrations 
-FOR INSERT 
-TO anon, authenticated
-WITH CHECK (true);
+-- Allow public read/write access
+CREATE POLICY "Allow public all on registrations" ON public.registrations FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all on expenses" ON public.expenses FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all on savings_goals" ON public.savings_goals FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all on subscriptions" ON public.subscriptions FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all on scholarships" ON public.scholarships FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
 
--- 4. Policy: Allow anonymous users to select registrations
-CREATE POLICY "Allow public read on registrations" 
-ON public.registrations 
-FOR SELECT 
-TO anon, authenticated
-USING (true);
-
--- 5. Create index on email for fast lookups
+-- Indexes
 CREATE INDEX IF NOT EXISTS idx_registrations_email ON public.registrations(email);
+CREATE INDEX IF NOT EXISTS idx_expenses_category ON public.expenses(category);
+CREATE INDEX IF NOT EXISTS idx_savings_goals ON public.savings_goals(goal_name);
