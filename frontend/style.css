@@ -329,3 +329,279 @@ input:focus, select:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99
 
 .toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
 .toast { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-left: 4px solid var(--accent-green); padding: 0.9rem 1.2rem; border-radius: var(--radius-md); color: var(--text-main); font-size: 0.88rem; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+/* =========================================================
+   FINHUB v5.0 FEATURE MODULE STYLES
+   ========================================================= */
+
+/* AI BUDGET COPILOT BANNER */
+.copilot-banner {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.08));
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+.copilot-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+.copilot-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+}
+.copilot-tag {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: auto;
+}
+.copilot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+.copilot-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.copilot-card i {
+    font-size: 1.25rem;
+    margin-top: 0.15rem;
+}
+.copilot-card strong {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+}
+.copilot-card p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+.alert-warning { border-left: 3px solid #f59e0b; }
+.alert-warning i { color: #f59e0b; }
+.alert-success { border-left: 3px solid #10b981; }
+.alert-success i { color: #10b981; }
+.alert-info { border-left: 3px solid #06b6d4; }
+.alert-info i { color: #06b6d4; }
+
+/* FINANCIAL HEALTH SCORE GAUGE */
+.health-score-card {
+    padding: 1.75rem;
+}
+.score-circle-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 1rem auto;
+}
+.score-circle-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+.circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 10;
+}
+.circle-fill {
+    fill: none;
+    stroke: #10b981;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 314;
+    transition: stroke-dashoffset 1s ease;
+}
+.score-number-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.score-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    line-height: 1;
+}
+.score-max {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+.score-status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+.badge-good { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+.score-breakdown-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.metric-progress-item {
+    background: rgba(15, 23, 42, 0.4);
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+}
+.metric-prog-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
+}
+
+/* AI SCAM & FRAUD CHECKER */
+.scam-sample-chips {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.btn-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+    padding: 0.25rem 0.6rem;
+    border-radius: 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.btn-chip:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #818cf8;
+}
+.scam-result-box {
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    background: rgba(15, 23, 42, 0.8);
+}
+.result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.risk-badge {
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+.badge-safe { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-high-risk { background: rgba(239, 68, 68, 0.25); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); }
+.red-flags-list p {
+    margin-bottom: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.4;
+}
+
+/* 2000-2026 INDIA FINTECH TIMELINE */
+.fintech-timeline-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    position: relative;
+    padding: 1rem 0;
+}
+.timeline-node {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    position: relative;
+    transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+.timeline-node:hover {
+    transform: translateY(-4px);
+    border-color: #818cf8;
+}
+.timeline-node.active {
+    border-color: #10b981;
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.1), rgba(15, 23, 42, 0.8));
+}
+.timeline-node.future {
+    border-color: #06b6d4;
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.12), rgba(15, 23, 42, 0.8));
+}
+.node-year {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #818cf8;
+    background: rgba(99, 102, 241, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+}
+.node-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+.timeline-node h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+}
+.timeline-node p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.35;
+}
+
+/* GAMIFIED ACADEMY & BADGES */
+.academy-rank-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+.badges-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.25rem;
+}
+.badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+.badge-item i {
+    font-size: 1.75rem;
+}
+.badge-item.unlocked i {
+    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+}
+.bronze-icon { color: #cd7f32; }
+.silver-icon { color: #c0c0c0; }
+.gold-icon { color: #ffd700; }
+.platinum-icon { color: #e5e4e2; }
+.badge-item.locked { opacity: 0.35; filter: grayscale(1); }

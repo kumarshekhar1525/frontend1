@@ -351,6 +351,81 @@ app.get('/api/scholarships', async (req, res) => {
   res.json({ success: true, count: DEFAULT_SCHOLARSHIPS.length, data: DEFAULT_SCHOLARSHIPS });
 });
 
+// ==========================================
+// 8. AI SCAM & FRAUD CHECKER ENDPOINT
+// ==========================================
+app.post('/api/scam-check', (req, res) => {
+  const { text } = req.body;
+  if (!text) return res.status(400).json({ success: false, error: 'Text prompt required.' });
+
+  const content = text.toLowerCase();
+  const redFlags = [];
+  let riskScore = 0;
+
+  if (content.includes('lottery') || content.includes('won') || content.includes('prize') || content.includes('crore') || content.includes('lakh')) {
+    redFlags.push('🚩 Unsolicited Lottery / Prize Claim: Legitimate organizations never require registration fees to claim prizes.');
+    riskScore += 35;
+  }
+  if (content.includes('otp') || content.includes('pin') || content.includes('password') || content.includes('cvv')) {
+    redFlags.push('🚩 Sensitive Credential Request: Never share OTP, PIN, or CVV with anyone.');
+    riskScore += 40;
+  }
+  if (content.includes('urgent') || content.includes('immediately') || content.includes('blocked') || content.includes('suspended') || content.includes('24 hours')) {
+    redFlags.push('🚩 Artificial Urgency & Fear Tactics: Scammers use deadline pressure to prevent verification.');
+    riskScore += 25;
+  }
+  if (content.includes('http') || content.includes('bit.ly') || content.includes('.xyz') || content.includes('.top') || content.includes('click link')) {
+    redFlags.push('🚩 Suspicious External Link: Unverified URL shorteners or unofficial domains.');
+    riskScore += 30;
+  }
+  if (content.includes('processing fee') || content.includes('advance fee') || content.includes('deposit fee')) {
+    redFlags.push('🚩 Upfront Fee Demand: Requesting upfront payments before releasing funds or loans is a classic scam.');
+    riskScore += 35;
+  }
+
+  const finalScore = Math.min(100, riskScore);
+  const verdict = finalScore >= 50 ? 'HIGH RISK SCAM' : (finalScore > 0 ? 'SUSPICIOUS / PROCEED WITH CAUTION' : 'SAFE / LOW RISK');
+
+  return res.json({
+    success: true,
+    riskScore: finalScore,
+    verdict,
+    redFlags: redFlags.length > 0 ? redFlags : ['✅ No obvious phishing or scam indicators found in this text.'],
+    recommendation: finalScore >= 50 ? 'Do NOT click links, do NOT pay any money, and block the sender immediately.' : 'Verify sender identity through official customer care channels before taking action.'
+  });
+});
+
+// ==========================================
+// 9. SUBSCRIPTION LEAK DETECTOR ENDPOINTS
+// ==========================================
+app.get('/api/subscriptions', async (req, res) => {
+  const email = req.query.email || 'guest';
+  try {
+    const { data } = await supabase.from('subscriptions').select('*').eq('user_email', email);
+    if (data && data.length > 0) return res.json({ success: true, data });
+  } catch (e) {}
+  return res.json({ success: true, data: [] });
+});
+
+app.post('/api/subscriptions', async (req, res) => {
+  try {
+    const { name, category, monthly_cost, billing_cycle, user_email } = req.body;
+    const item = {
+      id: 'sub-' + Date.now(),
+      name,
+      category,
+      monthly_cost: parseFloat(monthly_cost || 0),
+      billing_cycle: billing_cycle || 'monthly',
+      user_email: user_email || 'guest',
+      created_at: new Date().toISOString()
+    };
+    try { await supabase.from('subscriptions').insert([item]); } catch (e) {}
+    return res.status(201).json({ success: true, data: item });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 const PORT = parseInt(process.env.PORT || '5001', 10);
 
 function startServer(portToTry) {

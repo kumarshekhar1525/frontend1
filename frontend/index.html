@@ -40,11 +40,14 @@
                 <nav class="nav-links" id="navLinks">
                     <a href="#" class="nav-link active" data-tab="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="navDashboard">Dashboard</span></a>
                     <a href="#" class="nav-link" data-tab="tab-monefy"><i class="fa-solid fa-utensils"></i> <span>Daily Expenses</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-udhar"><i class="fa-solid fa-handshake"></i> <span>Udhar & Money Tracker</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-udhar"><i class="fa-solid fa-handshake"></i> <span>Udhar & Tracker</span></a>
                     <a href="#" class="nav-link" data-tab="tab-scholarships"><i class="fa-solid fa-graduation-cap"></i> <span data-i18n="navScholarships">Scholarships</span></a>
                     <a href="#" class="nav-link" data-tab="tab-savings"><i class="fa-solid fa-piggy-bank"></i> <span data-i18n="navSavings">Savings Goals</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-calculators"><i class="fa-solid fa-calculator"></i> <span>Calculators (EMI/SIP)</span></a>
-                    <a href="#" class="nav-link" data-tab="tab-literacy"><i class="fa-solid fa-book-open-reader"></i> <span data-i18n="navLiteracy">Literacy</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-calculators"><i class="fa-solid fa-calculator"></i> <span>Multi-Calculators</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-subscriptions"><i class="fa-solid fa-ghost"></i> <span>Subscription Leaks</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-scam"><i class="fa-solid fa-shield-virus"></i> <span>AI Scam Checker</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-timeline"><i class="fa-solid fa-timeline"></i> <span>Fintech Timeline</span></a>
+                    <a href="#" class="nav-link" data-tab="tab-literacy"><i class="fa-solid fa-trophy"></i> <span data-i18n="navLiteracy">Literacy Academy</span></a>
                 </nav>
 
                 <div class="nav-actions">
@@ -191,6 +194,84 @@
                         <div class="metric-info">
                             <span class="metric-label">Applied Scholarships</span>
                             <h3 class="metric-value" id="userAppliedCount">0</h3>
+                        </div>
+                    </div>
+                <!-- AI BUDGET COPILOT INSIGHTS BANNER -->
+                <div class="glass-card copilot-banner margin-bottom" id="copilotBanner">
+                    <div class="copilot-header">
+                        <i class="fa-solid fa-wand-magic-sparkles text-indigo"></i>
+                        <h3>AI Budget Copilot Insights (एआई बजट सलाह)</h3>
+                        <span class="copilot-tag">⚡ Live Analysis</span>
+                    </div>
+                    <div class="copilot-grid" id="copilotCardsContainer">
+                        <div class="copilot-card alert-warning">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <div>
+                                <strong>Food & Dining Spike</strong>
+                                <p>Aapka food spending 18% badha hai is month!</p>
+                            </div>
+                        </div>
+                        <div class="copilot-card alert-success">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <div>
+                                <strong>Savings Milestone Path</strong>
+                                <p>Aap ₹2,000/month save karke 8 months mein ₹16,000 goal achieve kar sakte hain.</p>
+                            </div>
+                        </div>
+                        <div class="copilot-card alert-info">
+                            <i class="fa-solid fa-ghost"></i>
+                            <div>
+                                <strong>Recurring Subscriptions</strong>
+                                <p>Aapka subscription spending ₹1,850/month hai. Try our Leak Detector!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FINANCIAL HEALTH SCORE (0-100 GAUGE METER) -->
+                <div class="glass-card health-score-card margin-bottom">
+                    <div class="grid-2col align-center">
+                        <div class="gauge-column text-center">
+                            <h3><i class="fa-solid fa-heart-pulse glow-icon"></i> Financial Health Score</h3>
+                            <div class="score-circle-container">
+                                <svg class="score-circle-svg" viewBox="0 0 120 120">
+                                    <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                                    <circle class="circle-fill" id="scoreCircleFill" cx="60" cy="60" r="50" style="stroke-dashoffset: 80;"></circle>
+                                </svg>
+                                <div class="score-number-box">
+                                    <span class="score-num" id="healthScoreNum">78</span>
+                                    <span class="score-max">/ 100</span>
+                                </div>
+                            </div>
+                            <div class="score-status-badge badge-good" id="healthScoreBadge">Good Financial Status</div>
+                        </div>
+
+                        <div class="score-breakdown-column">
+                            <h4>Health Score Metrics (6 Key Factors)</h4>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>💰 Savings Ratio (20%)</span> <strong id="scoreSavingsVal">16 / 20</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillSavings" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>📉 Spending Control (20%)</span> <strong id="scoreSpendVal">15 / 20</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillSpend" style="width: 75%;"></div></div>
+                            </div>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>⚖️ Debt-to-Income (20%)</span> <strong id="scoreDebtVal">18 / 20</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillDebt" style="width: 90%;"></div></div>
+                            </div>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>🛡️ Emergency Fund (15%)</span> <strong id="scoreEmergVal">10 / 15</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillEmerg" style="width: 66%;"></div></div>
+                            </div>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>🎯 Goal Progress (15%)</span> <strong id="scoreGoalVal">12 / 15</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillGoal" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="metric-progress-item">
+                                <div class="metric-prog-header"><span>📜 Insurance Protection (10%)</span> <strong id="scoreInsurVal">7 / 10</strong></div>
+                                <div class="progress-track"><div class="progress-fill" id="fillInsur" style="width: 70%;"></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -535,6 +616,7 @@
                         <button type="button" class="calc-tab-btn active" id="calcTabEmi">EMI Loan Compare</button>
                         <button type="button" class="calc-tab-btn" id="calcTabSip">SIP Calculator</button>
                         <button type="button" class="calc-tab-btn" id="calcTabLumpsum">Lumpsum Calculator</button>
+                        <button type="button" class="calc-tab-btn" id="calcTabWhatIf"><i class="fa-solid fa-wand-magic"></i> What-If Simulator</button>
                     </div>
 
                     <!-- EMI Panel -->
@@ -640,17 +722,272 @@
                                 <div class="emi-metric"><span>Total Maturity Value:</span> <strong id="lumpMaturity" style="color:#818cf8; font-size:1.2rem;">₹3,10,585</strong></div>
                             </div>
                         </div>
+                    <!-- What-If Simulator Panel -->
+                    <div id="panelWhatIf" style="display: none;" class="margin-top">
+                        <div class="grid-2col">
+                            <div>
+                                <h4><i class="fa-solid fa-sliders"></i> Test Financial Scenarios (अगर ऐसा हो तो?)</h4>
+                                <div class="form-group">
+                                    <label>Agar Monthly Salary Badh Jaye: (+₹<span id="whatifSalaryVal">5000</span>)</label>
+                                    <input type="range" id="sliderSalary" min="0" max="25000" step="1000" value="5000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Agar Monthly Loan EMI Kam Ho Jaye: (-₹<span id="whatifEmiVal">3000</span>)</label>
+                                    <input type="range" id="sliderEmi" min="0" max="15000" step="500" value="3000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Agar Extra Monthly Save/SIP Kare: (+₹<span id="whatifSaveVal">2000</span>)</label>
+                                    <input type="range" id="sliderSave" min="0" max="20000" step="500" value="2000">
+                                </div>
+                            </div>
+                            <div class="emi-result-box" style="justify-content: center;">
+                                <h4>Projections & Future Net Worth Impact</h4>
+                                <div class="emi-metric"><span>Monthly Net Cashflow Gain:</span> <strong id="whatifMonthlyNet" style="color:#10b981; font-size:1.2rem;">+₹10,000 / mo</strong></div>
+                                <div class="emi-metric"><span>1-Year Extra Wealth Accumulated:</span> <strong id="whatifYear1" style="color:#818cf8;">₹1,20,000</strong></div>
+                                <div class="emi-metric"><span>5-Year Wealth (with 12% Compounding):</span> <strong id="whatifYear5" style="color:#06b6d4; font-size:1.3rem;">₹8,24,800</strong></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- ======================================================= -->
-            <!-- MODULE 7: FINANCIAL LITERACY PLATFORM                    -->
+            <!-- MODULE 7: SUBSCRIPTION LEAK DETECTOR                     -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-subscriptions">
+                <div class="metrics-grid">
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon expense"><i class="fa-solid fa-ghost"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Monthly Subscription Leak (मासिक)</span>
+                            <h3 class="metric-value" id="subMonthlyLeakVal">₹1,850</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <div class="metric-icon budget"><i class="fa-solid fa-fire text-amber"></i></div>
+                        <div class="metric-info">
+                            <span class="metric-label">Yearly Unnecessary Cost (वार्षिक)</span>
+                            <h3 class="metric-value" id="subYearlyLeakVal">₹22,200</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2col margin-top">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-plus-circle"></i> Add Recurring Subscription</h2>
+                            <p>Track OTT, Gym, Apps, Cloud storage, and recurring services.</p>
+                        </div>
+                        <form id="subForm">
+                            <div class="form-group">
+                                <label>Subscription Name *</label>
+                                <input type="text" id="subName" placeholder="e.g. Netflix 4K, Spotify, Gym Membership, iCloud" required>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="subCategory">
+                                        <option value="OTT / Movies">🎬 Netflix / Prime / Hotstar</option>
+                                        <option value="Music / Audio">🎵 Spotify / Apple Music</option>
+                                        <option value="Gym / Health">🏋️ Gym / Health Club</option>
+                                        <option value="Cloud Storage">☁️ iCloud / Google One</option>
+                                        <option value="Software / Apps">💻 Software / AI Subscription</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Monthly Cost (₹) *</label>
+                                    <input type="number" id="subCost" placeholder="649" min="1" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary"><i class="fa-solid fa-bell"></i> Track Subscription</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-shield-cat text-amber"></i> Active Subscriptions Leak List</h2>
+                            <p>Identify forgotten subscriptions & cancel unused services to save money.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subscription</th>
+                                        <th>Category</th>
+                                        <th>Monthly</th>
+                                        <th>Yearly</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscriptionsTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 8: AI SCAM & FRAUD CHECKER                       -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-scam">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-shield-virus glow-icon"></i> AI Scam & Phishing Fraud Checker (स्कैम जांचकर्ता)</h2>
+                        <p>Paste any suspicious SMS, WhatsApp message, email, or loan offer to analyze safety red flags instantly.</p>
+                    </div>
+
+                    <div class="grid-2col margin-top">
+                        <div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-paste"></i> Paste Suspicious Text Message / Offer Here *</label>
+                                <textarea id="scamInputText" rows="6" placeholder="Paste message here e.g. 'Congratulations! You won ₹25 Lakhs in KBC lottery. Pay ₹2,500 registration fee to claim your prize immediately...'"></textarea>
+                            </div>
+
+                            <div class="scam-sample-chips margin-bottom">
+                                <span>Quick Samples:</span>
+                                <button type="button" class="btn-chip" onclick="fillScamSample(1)">🎁 Lottery Scam</button>
+                                <button type="button" class="btn-chip" onclick="fillScamSample(2)">⚠️ Bank Account Blocked</button>
+                                <button type="button" class="btn-chip" onclick="fillScamSample(3)">💰 Pre-Approved Loan Fee</button>
+                            </div>
+
+                            <button type="button" class="btn-primary" id="analyzeScamBtn"><i class="fa-solid fa-magnifying-glass-dollar"></i> Scan & Analyze Message for Red Flags</button>
+                        </div>
+
+                        <div class="scam-result-box glass-card" id="scamResultBox">
+                            <div class="result-header">
+                                <span class="risk-badge badge-safe" id="scamVerdictBadge">READY TO SCAN</span>
+                                <h4>Scam Risk Score: <strong id="scamRiskScoreVal">0 / 100</strong></h4>
+                            </div>
+                            <div class="red-flags-list margin-top" id="scamRedFlagsList">
+                                <p style="color:var(--text-muted);">Paste a message on the left and click 'Scan & Analyze' to see red flags breakdown.</p>
+                            </div>
+                            <div class="scam-advice-box margin-top" id="scamAdviceBox">
+                                💡 <strong>Safety Rule:</strong> Never send money, share OTP/PIN, or click unverified links.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 9: 2000 → 2026 INDIA FINTECH TIMELINE             -->
+            <!-- ======================================================= -->
+            <section class="tab-panel" id="tab-timeline">
+                <div class="glass-card">
+                    <div class="card-header text-center">
+                        <h2><i class="fa-solid fa-timeline glow-icon"></i> 2000 → 2026 India Fintech Evolution Timeline</h2>
+                        <p>Explore how India transformed from physical paper banking to world-leading AI Autonomous Finance.</p>
+                    </div>
+
+                    <div class="fintech-timeline-container margin-top">
+                        <div class="timeline-node active">
+                            <div class="node-year">2000</div>
+                            <div class="node-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                            <h4>Paper Banking & Cheques</h4>
+                            <p>Manual branch queues, Demand Drafts, and paper cheque clearing taking 3-5 days.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2004</div>
+                            <div class="node-icon"><i class="fa-solid fa-building-columns"></i></div>
+                            <h4>RTGS Launch</h4>
+                            <p>Real Time Gross Settlement introduced by RBI for high-value interbank transfers.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2005</div>
+                            <div class="node-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                            <h4>NEFT Launched</h4>
+                            <p>National Electronic Funds Transfer enabled batch-based bank transfers across India.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2010</div>
+                            <div class="node-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <h4>IMPS 24x7 Realtime</h4>
+                            <p>Immediate Payment Service created instant mobile bank transfers 24/7/365.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2012</div>
+                            <div class="node-icon"><i class="fa-solid fa-credit-card"></i></div>
+                            <h4>RuPay Network</h4>
+                            <p>NPCI launched India's indigenous debit & credit card payment network.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2014</div>
+                            <div class="node-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+                            <h4>Jan Dhan Yojana</h4>
+                            <p>Massive financial inclusion drive bringing 500M+ zero-balance bank accounts.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2016</div>
+                            <div class="node-icon"><i class="fa-solid fa-qrcode text-emerald"></i></div>
+                            <h4>UPI Revolution</h4>
+                            <p>Unified Payments Interface transformed India into the world leader in instant QR mobile payments.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="node-year">2020</div>
+                            <div class="node-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                            <h4>UPI AutoPay & Mandates</h4>
+                            <p>Seamless recurring payment mandates for subscriptions, EMIs, and SIPs.</p>
+                        </div>
+
+                        <div class="timeline-node future">
+                            <div class="node-year">2026</div>
+                            <div class="node-icon"><i class="fa-solid fa-brain text-cyan"></i></div>
+                            <h4>AI Finance & FinHub</h4>
+                            <p>Autonomous AI Copilot, Health Score, Scam Checker, and Intelligent Wealth Building.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- MODULE 10: GAMIFIED FINANCIAL LITERACY ACADEMY           -->
             <!-- ======================================================= -->
             <section class="tab-panel" id="tab-literacy">
+                <!-- GAMIFIED XP & BADGES HEADER CARD -->
+                <div class="glass-card academy-header-card margin-bottom">
+                    <div class="grid-2col align-center">
+                        <div>
+                            <div class="academy-rank-row">
+                                <span class="rank-badge badge-gold" id="academyRankBadge"><i class="fa-solid fa-crown"></i> Level 1 Novice</span>
+                                <h4>Total Financial XP: <strong id="academyXpVal" class="text-indigo">0 XP</strong></h4>
+                            </div>
+                            <div class="progress-track margin-top" style="height: 12px;">
+                                <div class="progress-fill" id="academyXpFill" style="width: 10%; background: linear-gradient(90deg, #6366f1, #10b981);"></div>
+                            </div>
+                            <p class="margin-top text-sm" style="color:var(--text-muted);">Answer quiz questions correctly to gain +50 XP and unlock Platinum Guru Status!</p>
+                        </div>
+
+                        <div class="badges-row">
+                            <div class="badge-item locked" id="badgeBronze" title="Bronze Saver (50 XP)">
+                                <i class="fa-solid fa-award bronze-icon"></i>
+                                <span>Bronze</span>
+                            </div>
+                            <div class="badge-item locked" id="badgeSilver" title="Silver Investor (100 XP)">
+                                <i class="fa-solid fa-medal silver-icon"></i>
+                                <span>Silver</span>
+                            </div>
+                            <div class="badge-item locked" id="badgeGold" title="Gold FinTech Master (150 XP)">
+                                <i class="fa-solid fa-trophy gold-icon"></i>
+                                <span>Gold</span>
+                            </div>
+                            <div class="badge-item locked" id="badgePlatinum" title="Platinum Guru (250 XP)">
+                                <i class="fa-solid fa-gem platinum-icon"></i>
+                                <span>Platinum</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="glass-card margin-bottom">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-book-open glow-icon"></i> Financial Literacy Guides (वित्तीय साक्षरता)</h2>
+                        <h2><i class="fa-solid fa-book-open glow-icon"></i> 2-Minute Financial Micro-Lessons (वित्तीय पाठ)</h2>
                         <p>Essential financial principles every individual should master.</p>
                     </div>
                     <div class="guides-grid">
@@ -679,8 +1016,8 @@
 
                 <div class="glass-card">
                     <div class="card-header">
-                        <h2><i class="fa-solid fa-brain glow-icon"></i> Financial Knowledge Quiz</h2>
-                        <p>Test your knowledge and earn your Financial IQ score.</p>
+                        <h2><i class="fa-solid fa-brain glow-icon"></i> Financial Knowledge Quiz (+50 XP per question)</h2>
+                        <p>Test your knowledge, level up your rank, and earn achievement badges!</p>
                     </div>
                     <div id="quizContainer">
                         <div class="quiz-question-card" id="quizCard">
@@ -691,6 +1028,7 @@
                             <i class="fa-solid fa-trophy score-icon"></i>
                             <h3>Quiz Completed!</h3>
                             <p>Your Financial IQ Score: <strong id="quizScoreVal">0/5</strong></p>
+                            <p>Total XP Earned: <strong id="quizXpEarnedVal" class="text-indigo">+0 XP</strong></p>
                             <button type="button" class="btn-primary" id="restartQuizBtn">Try Again</button>
                         </div>
                     </div>

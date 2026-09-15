@@ -65,17 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAuthSystem();
     setupEmiCalculator();
     setupCalculators();
+    setupWhatIfSimulator();
     setupStudentPlanner();
     setupSavingsGoalsForm();
     setupMonefyTracker();
     setupUdharTracker();
+    setupSubscriptionLeakDetector();
+    setupScamChecker();
+    setupGamifiedAcademy();
     setupAiChatbot();
     setupLoanApplication();
     loadScholarships();
     loadExpenses();
     loadSavingsGoals();
     loadUdharTracker();
+    loadSubscriptions();
     loadQuizQuestion();
+    calculateHealthScore();
     checkExistingUserSession();
 });
 
@@ -873,26 +879,23 @@ function setupCalculators() {
     const tabEmi = document.getElementById('calcTabEmi');
     const tabSip = document.getElementById('calcTabSip');
     const tabLump = document.getElementById('calcTabLumpsum');
+    const tabWhatIf = document.getElementById('calcTabWhatIf');
 
     const panelEmi = document.getElementById('panelEmi');
     const panelSip = document.getElementById('panelSip');
     const panelLump = document.getElementById('panelLumpsum');
+    const panelWhatIf = document.getElementById('panelWhatIf');
 
     if (tabEmi && tabSip && tabLump) {
-        tabEmi.addEventListener('click', () => {
-            tabEmi.classList.add('active'); tabSip.classList.remove('active'); tabLump.classList.remove('active');
-            panelEmi.style.display = 'block'; panelSip.style.display = 'none'; panelLump.style.display = 'none';
-        });
-        tabSip.addEventListener('click', () => {
-            tabSip.classList.add('active'); tabEmi.classList.remove('active'); tabLump.classList.remove('active');
-            panelSip.style.display = 'block'; panelEmi.style.display = 'none'; panelLump.style.display = 'none';
-            updateSipCalc();
-        });
-        tabLump.addEventListener('click', () => {
-            tabLump.classList.add('active'); tabEmi.classList.remove('active'); tabSip.classList.remove('active');
-            panelLump.style.display = 'block'; panelEmi.style.display = 'none'; panelSip.style.display = 'none';
-            updateLumpsumCalc();
-        });
+        const resetTabs = () => {
+            [tabEmi, tabSip, tabLump, tabWhatIf].forEach(t => t && t.classList.remove('active'));
+            [panelEmi, panelSip, panelLump, panelWhatIf].forEach(p => p && (p.style.display = 'none'));
+        };
+
+        tabEmi.addEventListener('click', () => { resetTabs(); tabEmi.classList.add('active'); panelEmi.style.display = 'block'; });
+        tabSip.addEventListener('click', () => { resetTabs(); tabSip.classList.add('active'); panelSip.style.display = 'block'; updateSipCalc(); });
+        tabLump.addEventListener('click', () => { resetTabs(); tabLump.classList.add('active'); panelLump.style.display = 'block'; updateLumpsumCalc(); });
+        if (tabWhatIf) tabWhatIf.addEventListener('click', () => { resetTabs(); tabWhatIf.classList.add('active'); panelWhatIf.style.display = 'block'; updateWhatIfCalc(); });
     }
 
     ['sipMonthly', 'sipRate', 'sipYears'].forEach(id => {
@@ -1241,7 +1244,12 @@ function checkQuizAnswer(selectedIdx) {
         if (idx === selectedIdx && idx !== q.ans) btn.classList.add('wrong');
     });
 
-    if (selectedIdx === q.ans) quizScore++;
+    if (selectedIdx === q.ans) {
+        quizScore++;
+        academyXp += 50;
+        localStorage.setItem('finhub_academy_xp', academyXp.toString());
+        updateAcademyXpUI();
+    }
 
     setTimeout(() => {
         currentQuizIndex++;
@@ -1258,6 +1266,9 @@ function showQuizResults() {
     const scoreBox = document.getElementById('quizScoreBox');
     scoreBox.style.display = 'block';
     document.getElementById('quizScoreVal').innerText = `${quizScore}/${QUIZ_QUESTIONS.length}`;
+    if (document.getElementById('quizXpEarnedVal')) {
+        document.getElementById('quizXpEarnedVal').innerText = `+${quizScore * 50} XP`;
+    }
 
     document.getElementById('restartQuizBtn').onclick = () => {
         currentQuizIndex = 0; quizScore = 0;
